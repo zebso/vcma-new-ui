@@ -117,27 +117,9 @@ function generateUserId() {
 }
 
 function updateRankingDisplay(ranking) {
-  const container = document.getElementById('ranking');
-  const title = container.querySelector('h3.ranking-title');
-  container.innerHTML = `
-    <h3 style="margin-bottom: 20px;">ユーザー</h3>
-    <div class="input-section content-box">
-      <h3 style="margin-bottom: 16px;">ユーザー追加</h3>
+  const container = document.getElementById('ranking-box');
 
-      <div class="input-group">
-        <label>ユーザーID（任意。未入力なら自動生成）</label>
-        <input type="text" class="input-field" id="new-user-id" placeholder="例: CC-2025-XXXXX">
-      </div>
-
-      <div class="input-group">
-        <label>初期残高</label>
-        <input type="number" class="input-field" id="initial-balance" placeholder="0">
-      </div>
-
-      <button class="btn" id="create-user-btn">作成</button>
-    </div>
-  `;
-  container.appendChild(title);
+  container.innerHTML = '';
 
   ranking.forEach((user, index) => {
     const item = document.createElement('div');

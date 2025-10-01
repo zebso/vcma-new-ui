@@ -31,7 +31,8 @@
             </div>
 
             <!-- 実際のプレビュー -->
-            <video id="qr-video" playsinline style="width:100%;max-height:260px;display:none;border-radius:8px;"></video>
+            <video id="qr-video" playsinline
+              style="width:100%;max-height:260px;display:none;border-radius:8px;"></video>
             <!-- 描画＆ガイド用（非表示でOK / またはオーバーレイ描画に使う） -->
             <canvas id="qr-canvas" style="display:none;"></canvas>
 
@@ -95,8 +96,24 @@
 
       <!-- Ranking Tab -->
       <div class="tab-content" id="ranking">
+        <h3 style="margin-bottom: 20px;">ユーザー</h3>
+        <div class="input-section content-box">
+          <h3 style="margin-bottom: 16px;">ユーザー追加</h3>
+
+          <div class="input-group">
+            <label>ユーザーID（任意。未入力なら自動生成）</label>
+            <input type="text" class="input-field" id="new-user-id" placeholder="例: CC-2025-XXXXX">
+          </div>
+
+          <div class="input-group">
+            <label>初期残高</label>
+            <input type="number" class="input-field" id="initial-balance" placeholder="0">
+          </div>
+
+          <button class="btn" id="create-user-btn">作成</button>
+        </div>
         <h3 class="ranking-title" style="margin-bottom: 20px;">ランキング</h3>
-        <div style="text-align: center; padding: 40px 20px; color: #666;">
+        <div id="ranking-box" style="text-align: center; color: #666;">
           <i class="material-icons" style="font-size: 48px; margin-bottom: 16px;">leaderboard</i>
           <div>ランキングを読み込み中...</div>
         </div>

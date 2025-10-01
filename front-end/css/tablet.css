@@ -1,11 +1,16 @@
 @media (min-width: 768px) {
+
+  nav {
+    gap: 32px;
+    padding: 16px;
+  }
   
   .nav-item {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 16px 32px;
     border-radius: 8px;
+    padding: 16px 8px;
 
     &.active {
       background: #1976d221;
