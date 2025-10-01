@@ -1,0 +1,23 @@
+@media (min-width: 768px) {
+  
+  .nav-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 16px 32px;
+    border-radius: 8px;
+
+    &.active {
+      background: #1976d221;
+    }
+
+    i {
+      margin: 0 12px 0 0;
+      font-size: 32px;
+    }
+
+    span {
+      font-size: 14px;
+    }
+  }
+}

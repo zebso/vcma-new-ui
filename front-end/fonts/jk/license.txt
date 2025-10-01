@@ -1,0 +1,11 @@
+■ フォントについて
+
+このプロジェクトでは以下のフォントを使用しています。
+
+- JK FONTS
+  URL: http://font.cutegirl.jp/
+  著作権: 仮名文字部分は JK FONTS に帰属します。
+
+- M+ FONTS PROJECT
+  URL: https://mplus-fonts.osdn.jp/
+  著作権: 漢字等は M+ FONTS PROJECT に帰属します。

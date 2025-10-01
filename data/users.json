@@ -1,0 +1,57 @@
+[
+  {
+    "id": "CC-2025-0NS9EN",
+    "balance": 1100,
+    "createdAt": "2025-08-20T14:43:26.626Z"
+  },
+  {
+    "id": "CC-2025-087AZR",
+    "balance": 200,
+    "createdAt": "2025-08-20T14:59:34.890Z"
+  },
+  {
+    "id": "CC-2025-0G5QEP",
+    "balance": 100,
+    "createdAt": "2025-08-20T15:00:34.412Z"
+  },
+  {
+    "id": "CC-2025-0PGFTQ",
+    "balance": 100,
+    "createdAt": "2025-08-21T00:54:55.863Z"
+  },
+  {
+    "id": "CC-2025-0HKMU7",
+    "balance": 100,
+    "createdAt": "2025-08-21T00:54:56.771Z"
+  },
+  {
+    "id": "CC-2025-06VE8T",
+    "balance": 100,
+    "createdAt": "2025-08-21T00:54:57.553Z"
+  },
+  {
+    "id": "CC-2025-0WP0Z7",
+    "balance": 100,
+    "createdAt": "2025-09-19T01:48:11.668Z"
+  },
+  {
+    "id": "test",
+    "balance": 100,
+    "createdAt": "2025-09-21T06:56:52.443Z"
+  },
+  {
+    "id": "CC-2025-X3TR9",
+    "balance": 0,
+    "createdAt": "2025-09-21T07:24:54.479Z"
+  },
+  {
+    "id": "test2",
+    "balance": 1000,
+    "createdAt": "2025-09-21T07:25:59.015Z"
+  },
+  {
+    "id": "test3",
+    "balance": 11000,
+    "createdAt": "2025-09-21T07:27:31.270Z"
+  }
+]

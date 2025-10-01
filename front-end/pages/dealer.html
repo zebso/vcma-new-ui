@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>所持金管理アプリ</title>
+  <link rel="stylesheet" href="../css/import.css">
+</head>
+
+<body>
+  <div class="app-container">
+    <header>
+      <h1 id="header-title">ダッシュボード</h1>
+    </header>
+
+    <div class="content">
+      <!-- Balance Tab -->
+      <div class="tab-content" id="balance">
+        <div class="balance-card">
+          <div class="balance-amount">¥0</div>
+          <div class="balance-label">現在の所持金</div>
+        </div>
+
+        <div class="input-section content-box">
+          <h3 style="margin-bottom: 16px;">ユーザー検索</h3>
+          <div class="qr-scanner" id="qr-scanner">
+            <div id="qr-idle">
+              <i class="material-icons">qr_code_scanner</i>
+              <div>タップしてQRスキャン開始</div>
+            </div>
+
+            <!-- 実際のプレビュー -->
+            <video id="qr-video" playsinline style="width:100%;max-height:260px;display:none;border-radius:8px;"></video>
+            <!-- 描画＆ガイド用（非表示でOK / またはオーバーレイ描画に使う） -->
+            <canvas id="qr-canvas" style="display:none;"></canvas>
+
+            <div id="qr-overlay" style="display:none; text-align:center; margin-top:8px;">
+              <button class="btn" id="qr-stop-btn" type="button">停止</button>
+              <button class="btn btn-outline" id="qr-switch-btn" type="button">カメラ切替</button>
+            </div>
+          </div>
+          <div style="text-align: center; margin: 16px 0; color: #666;">または</div>
+          <div class="input-group">
+            <label>ユーザーID</label>
+            <input type="text" class="input-field" placeholder="ユーザーIDを入力">
+          </div>
+          <button class="btn">検索</button>
+        </div>
+
+        <div class="input-section content-box">
+          <h3 style="margin-bottom: 16px;">金額変更</h3>
+          <div class="input-group">
+            <label>変更金額</label>
+            <input type="number" class="input-field" placeholder="金額を入力">
+          </div>
+          <div class="input-group">
+            <label>ゲーム名（オプション）</label>
+            <select id="game-type" class="input-field" style="width:100%;">
+              <option value="">選択してください</option>
+              <option value="blackjack">ブラックジャック</option>
+              <option value="poker">ポーカー</option>
+              <option value="baccarat">バカラ</option>
+              <option value="roulette">ルーレット</option>
+              <option value="slot">スロット</option>
+              <option value="other">その他</option>
+            </select>
+          </div>
+          <button class="btn">追加</button>
+          <button class="btn btn-outline">減算</button>
+        </div>
+      </div>
+
+      <!-- Dashboard Tab -->
+      <div class="tab-content active" id="dashboard">
+        <h3 style="margin-bottom: 20px;">ダッシュボード</h3>
+        <div class="stats-grid">
+          <div class="stat-card content-box">
+            <i class="material-icons">people</i>
+            <div class="stat-number" id="active-ids">-</div>
+            <div class="stat-label">有効ID数</div>
+          </div>
+          <div class="stat-card content-box">
+            <i class="material-icons">account_balance</i>
+            <div class="stat-number" id="total-balance">¥-</div>
+            <div class="stat-label">合計発行通貨</div>
+          </div>
+          <div class="stat-card content-box">
+            <i class="material-icons">swap_horiz</i>
+            <div class="stat-number" id="total-transactions">-</div>
+            <div class="stat-label">合計取引数</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ranking Tab -->
+      <div class="tab-content" id="ranking">
+        <h3 class="ranking-title" style="margin-bottom: 20px;">ランキング</h3>
+        <div style="text-align: center; padding: 40px 20px; color: #666;">
+          <i class="material-icons" style="font-size: 48px; margin-bottom: 16px;">leaderboard</i>
+          <div>ランキングを読み込み中...</div>
+        </div>
+      </div>
+
+      <!-- History Tab -->
+      <div class="tab-content" id="history">
+        <h3 style="margin-bottom: 20px;">取引履歴</h3>
+        <div style="text-align: center; padding: 40px 20px; color: #666;">
+          <i class="material-icons" style="font-size: 48px; margin-bottom: 16px;">history</i>
+          <div>履歴を読み込み中...</div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div class="tab-content" id="settings">
+        <h3 style="margin-bottom: 20px;">設定</h3>
+        <div class="settings-item content-box">
+          <div class="settings-label">ダークモード</div>
+          <label class="switch">
+            <input type="checkbox" id="dark-mode-toggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav>
+      <div class="nav-item active" onclick="switchTab('dashboard', this)">
+        <i class="material-icons">dashboard</i>
+        <span>統計</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('balance', this)">
+        <i class="material-icons">account_balance_wallet</i>
+        <span>残高</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('ranking', this)">
+        <i class="material-icons">people</i>
+        <span>ユーザー</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('history', this)">
+        <i class="material-icons">history</i>
+        <span>履歴</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('settings', this)">
+        <i class="material-icons">settings</i>
+        <span>設定</span>
+      </div>
+    </nav>
+  </div>
+
+  <script src="../js/jsQR.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/qrScanner.js"></script>
+</body>
+
+</html>

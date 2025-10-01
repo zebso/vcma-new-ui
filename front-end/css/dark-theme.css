@@ -1,0 +1,129 @@
+@charset "utf-8";
+
+body.dark-mode {
+
+  background-color: #121212;
+  color: #fff;
+
+  /* その他のダークモード用スタイル */
+  .app-container {
+    background: #1e1e1e;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  }
+
+  header {
+    background: #2d2d2d;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+    h1 {
+      color: #90caf9;
+    }
+  }
+
+  .content-box {
+    background: #2d2d2d;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .balance-card {
+    background: linear-gradient(135deg, #1565c0, #1976d2);
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.5);
+  }
+
+  .input-group label {
+    color: #b0b0b0;
+  }
+
+  .input-field {
+    background-color: #3d3d3d;
+    border-color: #555;
+    color: #ffffff;
+
+    &:focus {
+      border-color: #90caf9;
+    }
+  }
+
+  .btn {
+    background: #90caf9;
+    border-color: #90caf9;
+    color: #000;
+
+    &:hover {
+      background: #64b5f6;
+      border-color: #64b5f6;
+    }
+  }
+
+  .btn-outline {
+    color: #90caf9;
+    border-color: #90caf9;
+    background: #2d2d2d;
+
+    &:hover {
+      background: #90caf9;
+      color: #000;
+    }
+  }
+
+  .ranking-number {
+    background: #90caf9;
+    color: #000;
+  }
+
+  .ranking-amount {
+    color: #b0b0b0;
+  }
+
+  .history-date {
+    color: #b0b0b0;
+  }
+
+  .history-amount.positive {
+    color: #81c784;
+  }
+
+  .history-amount.negative {
+    color: #ef5350;
+  }
+
+  nav {
+    background: #2d2d2d;
+    border-top-color: #555;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .nav-item {
+    color: #b0b0b0;
+  }
+
+  .nav-item.active {
+    color: #90caf9;
+  }
+
+  .qr-scanner {
+    border-color: #90caf9;
+    color: #90caf9;
+  }
+
+  .stat-card {
+    background: #2d2d2d;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    i {
+      color: #90caf9;
+    }
+  }
+
+  .stat-number {
+    color: #ffffff;
+  }
+
+  .stat-label {
+    color: #b0b0b0;
+  }
+
+  .history-user {
+    color: #90caf9;
+  }
+}
