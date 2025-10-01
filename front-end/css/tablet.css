@@ -1,5 +1,9 @@
 @media (min-width: 768px) {
 
+  .tab-content {
+    padding: 32px 64px;
+  }
+
   nav {
     gap: 32px;
     padding: 16px;
