@@ -14,32 +14,32 @@ const qrSwitchBtn = document.getElementById('qr-switch-btn');
 
 const qrIdle = document.getElementById('qr-idle');
 
-async function enumerateCameras() {
-  const devices = await navigator.mediaDevices.enumerateDevices();
-  const videos = devices.filter(d => d.kind === 'videoinput');
-  qrDeviceIds = videos.map(v => v.deviceId);
-  // 背面カメラらしきデバイスを優先（environment）
-  if (qrDeviceIds.length > 1) {
-    const envIdx = videos.findIndex(v => /back|environment/i.test(v.label));
-    if (envIdx >= 0) qrCurrentIndex = envIdx;
-  }
+function enumerateCameras() {
+  return navigator.mediaDevices.enumerateDevices()
+    .then((devices) => {
+      const videos = devices.filter(d => d.kind === 'videoinput');
+      qrDeviceIds = videos.map(v => v.deviceId);
+      // 背面カメラらしきデバイスを優先（environment）
+      if (qrDeviceIds.length > 1) {
+        const envIdx = videos.findIndex(v => /back|environment/i.test(v.label));
+        if (envIdx >= 0) qrCurrentIndex = envIdx;
+      }
+    });
 }
 
-async function startQrScanner() {
+function startQrScanner() {
   // 1. まず簡易許可プリフライト（iOS対策&ユーザーに権限ダイアログを出す）
-  async function warmup(constraints) {
-    try {
-      const s = await navigator.mediaDevices.getUserMedia(constraints);
-      s.getTracks().forEach(t => t.stop()); // すぐ止める
-      return true;
-    } catch (e) {
-      throw e;
-    }
+  function warmup(constraints) {
+    return navigator.mediaDevices.getUserMedia(constraints)
+      .then((s) => {
+        s.getTracks().forEach(t => t.stop()); // すぐ止める
+        return true;
+      });
   }
 
   // 2. 使いやすいメッセージに変換
   function humanizeError(err) {
-    const name = err && (err.name || err.code) || '';
+    const name = (err && (err.name || err.code)) || '';
     switch (name) {
       case 'NotAllowedError':
       case 'PermissionDeniedError':
@@ -61,53 +61,54 @@ async function startQrScanner() {
   }
 
   // 3. 実処理
-  try {
-    await enumerateCameras();
+  return enumerateCameras()
+    .then(() => {
+      const tryOrders = [
+        { audio: false, video: { facingMode: { ideal: 'environment' } } },
+        qrDeviceIds.length ? { audio: false, video: { deviceId: { exact: qrDeviceIds[qrCurrentIndex] } } } : null
+      ].filter(Boolean);
 
-    // A. まず facingMode で起動→失敗したら deviceId 指定で再試行
-    const tryOrders = [
-      { audio: false, video: { facingMode: { ideal: 'environment' } } },
-      qrDeviceIds.length ? { audio: false, video: { deviceId: { exact: qrDeviceIds[qrCurrentIndex] } } } : null
-    ].filter(Boolean);
+      let lastErr = null;
 
-    let lastErr = null;
-    for (const constraints of tryOrders) {
-      try {
-        // 許可ダイアログをここで出しつつ検証
-        await warmup(constraints);
+      function tryAt(i) {
+        if (i >= tryOrders.length) {
+          return Promise.reject(lastErr || new Error('Unknown getUserMedia error'));
+        }
+        const constraints = tryOrders[i];
 
-        // 本番ストリーム取得
-        qrStream = await navigator.mediaDevices.getUserMedia(constraints);
-        qrTrackList = qrStream.getVideoTracks();
+        return warmup(constraints)
+          .then(() => navigator.mediaDevices.getUserMedia(constraints))
+          .then((stream) => {
+            qrStream = stream;
+            qrTrackList = qrStream.getVideoTracks();
 
-        qrVideo.srcObject = qrStream;
-        await qrVideo.play();
+            qrVideo.srcObject = qrStream;
+            return qrVideo.play();
+          })
+          .then(() => {
+            qrVideo.style.display = 'block';
+            qrOverlay.style.display = 'block';
+            qrIdle.style.display = 'none';
 
-        qrVideo.style.display = 'block';
-        qrOverlay.style.display = 'block';
-        qrIdle.style.display = 'none';
-
-        qrTicking = true;
-        tickQr();
-        showNotification('スキャンを開始しました');
-        return; // 成功
-      } catch (err) {
-        lastErr = err;
-        continue; // 次の方法で再試行
+            qrTicking = true;
+            tickQr();
+            showNotification('スキャンを開始しました');
+            return; // 成功
+          })
+          .catch((err) => {
+            lastErr = err;
+            return tryAt(i + 1); // 次の方法で再試行
+          });
       }
-    }
 
-    // どれも失敗
-    throw lastErr || new Error('Unknown getUserMedia error');
-
-  } catch (err) {
-    // 具体的な説明を出す
-    const msg = humanizeError(err);
-    showNotification(`カメラを起動できません: ${msg}`, 'error');
-
-    // 典型的なブロック時のヒントをUIにも残す（任意）
-    console.error('[QR] getUserMedia failed:', err);
-  }
+      return tryAt(0);
+    })
+    .catch((err) => {
+      const msg = humanizeError(err);
+      showNotification(`カメラを起動できません: ${msg}`, 'error');
+      console.error('[QR] getUserMedia failed:', err);
+      throw err;
+    });
 }
 
 function stopQrScanner() {
@@ -123,11 +124,11 @@ function stopQrScanner() {
   qrIdle.style.display = 'block';
 }
 
-async function switchCamera() {
+function switchCamera() {
   if (!qrDeviceIds.length) return;
   stopQrScanner();
   qrCurrentIndex = (qrCurrentIndex + 1) % qrDeviceIds.length;
-  await startQrScanner();
+  return startQrScanner();
 }
 
 function drawLine(ctx, begin, end) {
@@ -195,12 +196,17 @@ qrScanner.addEventListener('click', (e) => {
   // ボタン領域のクリックはここでは処理しない
   if (e.target === qrStopBtn || e.target === qrSwitchBtn) return;
 
-  if (!qrStream) startQrScanner();
+  if (!qrStream) {
+    startQrScanner().catch(() => {});
+  }
 });
 
 // 明示ボタン
 qrStopBtn.addEventListener('click', stopQrScanner);
-qrSwitchBtn.addEventListener('click', switchCamera);
+qrSwitchBtn.addEventListener('click', () => {
+  const p = switchCamera();
+  if (p && typeof p.then === 'function') p.catch(() => {});
+});
 
 // iOSの権限プリフライト（必須ではない）
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -212,7 +218,7 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
   fallback.accept = 'image/*';
   fallback.capture = 'environment';
   fallback.style.marginTop = '8px';
-  fallback.addEventListener('change', async (evt) => {
+  fallback.addEventListener('change', (evt) => {
     const file = evt.target.files[0];
     if (!file) return;
     const img = new Image();
