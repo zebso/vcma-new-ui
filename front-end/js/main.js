@@ -73,117 +73,6 @@ function formatDate(timestamp) {
   return new Date(timestamp).toLocaleString('ja-JP');
 }
 
-// UI Update functions
-function updateBalanceDisplay(balance) {
-  const balanceElement = document.querySelector('.balance-amount');
-  balanceElement.textContent = formatCurrency(balance);
-  currentBalance = balance;
-}
-
-function handleCreateUser() {
-  const idInput = document.getElementById('new-user-id');
-  const balInput = document.getElementById('initial-balance');
-
-  let id = (idInput.value || '').trim();
-  if (!id) {
-    id = generateUserId();
-    idInput.value = id; // 画面にも反映
-  }
-
-  const balance = Math.max(0, parseInt(balInput.value || '0', 10) || 0);
-
-  createUser(id, balance)
-    .then((res) => {
-      const created = res.user; // { id, balance }
-      showNotification(`ユーザー ${created.id} を作成しました`);
-      balInput.value = '';
-    })
-    .catch((e) => {
-      // apiCall 側で通知済み
-    })
-    .finally(() => {
-      // ダッシュボード数値も更新
-      loadDashboard();
-    });
-}
-
-function generateUserId() {
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let suffix = '';
-  for (let i = 0; i < 5; i++) {
-    suffix += alphabet[Math.floor(Math.random() * alphabet.length)];
-  }
-  return `CC-2025-${suffix}`;
-}
-
-function updateRankingDisplay(ranking) {
-  const container = document.getElementById('ranking-box');
-
-  container.innerHTML = '';
-
-  ranking.forEach((user, index) => {
-    const item = document.createElement('div');
-    item.className = 'ranking-item content-box';
-    item.innerHTML = `
-      <div class="ranking-number">${index + 1}</div>
-      <div class="ranking-info">
-          <div class="ranking-name">${user.id}</div>
-          <div class="ranking-amount">${formatCurrency(user.balance)}</div>
-      </div>
-    `;
-    container.appendChild(item);
-  });
-  // 作成ボタン
-  document.getElementById('create-user-btn').addEventListener('click', handleCreateUser);
-
-}
-
-function updateHistoryDisplay(history) {
-  const container = document.getElementById('history');
-  const title = container.querySelector('h3');
-  container.innerHTML = '';
-  container.appendChild(title);
-
-  if (history.length === 0) {
-    const noData = document.createElement('div');
-    noData.style.cssText = 'text-align: center; padding: 40px 20px; color: #666;';
-    noData.innerHTML = '<i class="material-icons" style="font-size: 48px; margin-bottom: 16px;">history</i><div>取引履歴がありません</div>';
-    container.appendChild(noData);
-    return;
-  }
-
-  history.forEach(item => {
-    const historyItem = document.createElement('div');
-    historyItem.className = 'history-item content-box';
-
-    const typeText = {
-      'add': '入金',
-      'subtract': '出金',
-      'generate': 'アカウント作成'
-    }[item.type] || item.type;
-
-    // typeで正負を判定：add/generate は positive、subtract は negative
-    const amountClass = (item.type === 'add' || item.type === 'generate') ? 'positive' : 'negative';
-    const amountText = (item.type === 'add' || item.type === 'generate') ?
-      `+${formatCurrency(Math.abs(item.amount))}` :
-      `-${formatCurrency(Math.abs(item.amount))}`; // subtractの場合は既に負数
-
-    historyItem.innerHTML = `
-                    <div class="history-user">ユーザーID: ${item.id}</div>
-                    <div class="history-date">${formatDate(item.timestamp)}</div>
-                    <div class="history-description">${typeText}${item.games ? ` (${item.games})` : ''}</div>
-                    <div class="history-amount ${amountClass}">${amountText}</div>
-                `;
-    container.appendChild(historyItem);
-  });
-}
-
-function updateDashboardDisplay(stats) {
-  document.getElementById('active-ids').textContent = stats.activeIds.toLocaleString();
-  document.getElementById('total-balance').textContent = formatCurrency(stats.totalBalance);
-  document.getElementById('total-transactions').textContent = stats.totalTransactions.toLocaleString();
-}
-
 // Event handlers
 function handleUserSearch() {
   const userIdInput = document.querySelector('input[placeholder="ユーザーIDを入力"]');
@@ -311,6 +200,11 @@ function switchTab(tabName, navItem) {
   } else if (tabName === 'history') {
     loadHistory();
   }
+
+  window.scroll({
+    top: 0,
+    behavior: "smooth",
+  });
 }
 
 // Initialize event listeners
