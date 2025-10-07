@@ -221,8 +221,8 @@ document.addEventListener('DOMContentLoaded', function () {
   searchBtn.addEventListener('click', handleUserSearch);
 
   // Add/Subtract buttons
-  const addBtn = document.querySelectorAll('.input-section')[1].querySelector('.btn');
-  const subtractBtn = document.querySelectorAll('.input-section')[1].querySelector('.btn-outline');
+  const addBtn = document.querySelector('#add-amount-btn');
+  const subtractBtn = document.querySelector('#subtract-amount-btn');
 
   addBtn.addEventListener('click', () => handleMoneyChange(true));
   subtractBtn.addEventListener('click', () => handleMoneyChange(false));

@@ -147,7 +147,7 @@ header {
   }
 }
 
-.btn-outline {
+.btn-outline{
   background: transparent;
   color: #1976d2;
   border: 2px solid #1976d2;
@@ -156,6 +156,34 @@ header {
   &:hover {
     background: #1976d2;
     color: #fff;
+  }
+}
+
+.select-wrapper {
+  display: flex;
+  gap: 8px;
+}
+
+label[for="lock-toggle"] {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+  background: transparent;
+  color: #1976d2;
+  border: 2px solid #1976d2;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+
+  #lock-toggle:checked + & {
+    background: #1976d2;
+    color: #fff;
+  }
+
+  i.hidden {
+    display: none;
   }
 }
 

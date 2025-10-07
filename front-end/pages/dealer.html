@@ -57,19 +57,26 @@
           </div>
           <div class="input-group">
             <label>ゲーム名（オプション）</label>
-            <select id="game-type" class="input-field" style="width:100%;">
-              <option value="">選択してください</option>
-              <option value="blackjack">ブラックジャック</option>
-              <option value="poker">ポーカー</option>
-              <option value="baccarat">バカラ</option>
-              <option value="roulette">ルーレット</option>
-              <option value="slot">スロット</option>
-              <option value="exchange">商品交換</option>
-              <option value="other">その他</option>
-            </select>
+            <div class="select-wrapper">
+              <select id="game-type" class="input-field">
+                <option value="">選択してください</option>
+                <option value="blackjack">ブラックジャック</option>
+                <option value="poker">ポーカー</option>
+                <option value="baccarat">バカラ</option>
+                <option value="roulette">ルーレット</option>
+                <option value="slot">スロット</option>
+                <option value="exchange">商品交換</option>
+                <option value="other">その他</option>
+              </select>
+              <input type="checkbox" id="lock-toggle" style="display: none;">
+              <label for="lock-toggle">
+                <i class="material-icons">lock_open</i>
+                <i class="material-icons hidden">lock</i>
+              </label>
+            </div>
           </div>
-          <button class="btn">追加</button>
-          <button class="btn btn-outline">減算</button>
+          <button class="btn" id="add-amount-btn">追加</button>
+          <button class="btn btn-outline" id="subtract-amount-btn">減算</button>
         </div>
       </div>
 
