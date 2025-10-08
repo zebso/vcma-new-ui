@@ -10,25 +10,25 @@
     gap: 32px;
     padding: 16px;
   }
-  
+
   .nav-item {
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 8px;
     padding: 16px 8px;
+  }
 
-    &.active {
-      background: #1976d221;
-    }
+  .nav-item.active {
+    background: #1976d221;
+  }
 
-    i {
-      margin: 0 12px 0 0;
-      font-size: 32px;
-    }
+  .nav-item i {
+    margin: 0 12px 0 0;
+    font-size: 32px;
+  }
 
-    span {
-      font-size: 14px;
-    }
+  .nav-item span {
+    font-size: 14px;
   }
 }
