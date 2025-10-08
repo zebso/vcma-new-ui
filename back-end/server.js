@@ -5,6 +5,7 @@ const path = require('path');
 const app = express();
 
 const PORT = 3000;
+const HOST = '10.16.243.159';
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../front-end')));
@@ -179,4 +180,5 @@ app.get('/dealer', (req, res) => {
 app.listen(process.env.PORT || PORT, () => {
   console.log(`The server started on port ${PORT}`);
   console.log(`Local server is running at http://localhost:${PORT}/`);
+  console.log(`Network server is running at http://${HOST}:${PORT}/`);
 });
