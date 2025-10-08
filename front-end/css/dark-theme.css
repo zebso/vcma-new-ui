@@ -83,8 +83,20 @@ body.dark-mode .ranking-number {
   color: #000;
 }
 
-body.dark-mode .ranking-amount {
+body.dark-mode .ranking-name {
   color: #b0b0b0;
+}
+
+body.dark-mode .rank-1 {
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+}
+
+body.dark-mode .rank-2 {
+  box-shadow: 0 4px 12px rgba(192, 192, 192, 0.2);
+}
+
+body.dark-mode .rank-3 {
+  box-shadow: 0 4px 12px rgba(205, 127, 50, 0.2);
 }
 
 body.dark-mode .history-date {
