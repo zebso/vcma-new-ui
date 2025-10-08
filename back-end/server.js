@@ -18,7 +18,7 @@ const loadJSON = file => {
   try {
     const txt = fs.readFileSync(file, 'utf-8');
     return txt.trim() ? JSON.parse(txt) : [];
-  } catch {
+  } catch (e) {
     return [];
   }
 };

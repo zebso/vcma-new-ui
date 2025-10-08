@@ -1,14 +1,13 @@
 // API functions
-function apiCall(endpoint, options = {}) {
+function apiCall(endpoint, options) {
+  if (typeof options === 'undefined') options = {};
   showLoading(true);
 
-  const mergedOptions = {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options && options.headers)
-    }
-  };
+  // Object.assign でヘッダーをマージ（スプレッド構文の代替）
+  var mergedOptions = Object.assign({}, options);
+  var baseHeaders = { 'Content-Type': 'application/json' };
+  var optHeaders = (options && options.headers) ? options.headers : {};
+  mergedOptions.headers = Object.assign({}, baseHeaders, optHeaders);
 
   return fetch(`${API_BASE}${endpoint}`, mergedOptions)
     .then((response) =>
@@ -23,9 +22,10 @@ function apiCall(endpoint, options = {}) {
       showNotification(error.message, 'error');
       throw error;
     })
-    .finally(() => {
-      showLoading(false);
-    });
+    .then(
+      function (value) { showLoading(false); return value; },
+      function (err)   { showLoading(false); throw err; }
+    );
 }
 
 function getBalance(id) {

@@ -26,10 +26,16 @@ function handleCreateUser() {
     .catch((e) => {
       // apiCall 側で通知済み
     })
-    .finally(() => {
-      // ダッシュボード数値も更新
-      loadDashboard();
-    });
+    .then(
+      () => {
+        // ダッシュボード数値も更新
+        loadDashboard();
+      },
+      () => {
+        // 成功・失敗に関わらず実行（Promise.finallyの代替）
+        loadDashboard();
+      }
+    );
 }
 
 function generateUserId() {

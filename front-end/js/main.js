@@ -116,7 +116,7 @@ function handleMoneyChange(isAdd) {
   const amountInput = document.querySelector('input[placeholder="金額を入力"]');
   const gameInput = document.getElementById('game-type');
   const amount = parseInt(amountInput.value);
-  const games = (gameInput?.value || '').trim();
+  const games = ((gameInput && gameInput.value) || '').trim();
 
   if (!amount || amount <= 0) {
     showNotification('正しい金額を入力してください', 'error');
