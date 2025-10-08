@@ -241,3 +241,26 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
+
+
+// ロックボタンの状態でselectタブのオプションを固定化
+function lockSelect() {
+  const btn = document.getElementById('lock-toggle');
+  const select = document.getElementById('game-type');
+  const option = document.querySelectorAll('#game-type option');
+
+  if (btn.checked) {
+    option.forEach(function (opt) {
+      if (select.value !== opt.value) {
+        opt.disabled = true;
+      } else {
+        opt.disabled = false;
+        opt.selected = true;
+      }
+    });
+  } else {
+    option.forEach(function (opt) {
+      opt.disabled = false;
+    });
+  }
+}
