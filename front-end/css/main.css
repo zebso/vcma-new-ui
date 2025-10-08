@@ -167,7 +167,7 @@ header h1 {
 label[for="lock-toggle"] {
   margin: 0;
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -183,7 +183,15 @@ label[for="lock-toggle"] {
   color: #fff;
 }
 
-#lock-toggle i.hidden {
+.lock {
+  display: none;
+}
+
+#lock-toggle:checked+label[for="lock-toggle"] .lock {
+  display: block;
+}
+
+#lock-toggle:checked+label[for="lock-toggle"] .lock-open {
   display: none;
 }
 
