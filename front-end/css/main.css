@@ -221,18 +221,104 @@ label[for="lock-toggle"] {
 
 .ranking-info {
   flex: 1;
+  display: flex;
+  justify-content: space-between;
 }
 
 .ranking-name {
-  font-weight: 500;
-  margin-bottom: 4px;
   transition: color 0.3s ease;
+  font-weight: bold;
 }
 
 .ranking-amount {
-  color: #666;
-  font-size: 14px;
+  color: #059669;
   transition: color 0.3s ease;
+  font-weight: bold;
+}
+
+.ranking-top {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+  margin-bottom: 32px;
+}
+
+.ranking-top .ranking-info {
+  display: block;
+}
+
+.ranking-top .ranking-name {
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.ranking-top .ranking-amount {
+  font-size: 18px;
+}
+
+.ranking-top .ranking-item {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.ranking-top .ranking-item .ranking-number {
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  right: -20px;
+}
+
+.ranking-item.rank-1 {
+  border: 2px solid #ffd700;
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+}
+
+.ranking-item.rank-1 .ranking-number {
+  top: -8px;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #ffd700, #ffb347);
+  font-size: 18px;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+}
+
+.ranking-item.rank-1::after {
+  content: "👑";
+  position: absolute;
+  top: 0;
+  left: 8px;
+  font-size: 24px;
+}
+
+.ranking-item.rank-2 {
+  border: 2px solid #c0c0c0;
+  box-shadow: 0 4px 12px rgba(192, 192, 192, 0.2);
+}
+
+.ranking-item.rank-2 .ranking-number {
+  top: -6px;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
+  font-size: 16px;
+}
+
+.ranking-item.rank-3 {
+  border: 2px solid #cd7f32;
+  box-shadow: 0 4px 12px rgba(205, 127, 50, 0.2);
+}
+
+.ranking-item.rank-3 .ranking-number {
+  top: -4px;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #cd7f32, #b8732d);
+  font-size: 14px;
 }
 
 /* History Tab */

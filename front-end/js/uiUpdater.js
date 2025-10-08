@@ -50,23 +50,30 @@ function generateUserId() {
 function updateRankingDisplay(ranking) {
   const container = document.getElementById('ranking-box');
 
-  container.innerHTML = '';
+  container.innerHTML = '<div class="ranking-top"></div><div class="ranking-bottom"></div>';
+  const rankingTop = container.querySelector('.ranking-top');
+  const rankingBottom = container.querySelector('.ranking-bottom');
 
   ranking.forEach((user, index) => {
     const item = document.createElement('div');
-    item.className = 'ranking-item content-box';
+    item.className = `ranking-item content-box rank-${index + 1}`;
     item.innerHTML = `
       <div class="ranking-number">${index + 1}</div>
       <div class="ranking-info">
-          <div class="ranking-name">${user.id}</div>
-          <div class="ranking-amount">${formatCurrency(user.balance)}</div>
+        <div class="ranking-name">${user.id}</div>
+        <div class="ranking-amount">${formatCurrency(user.balance)}</div>
       </div>
     `;
-    container.appendChild(item);
+    
+    if (index <= 2) {
+      // 1~3位は特別デザイン
+      rankingTop.appendChild(item);
+    } else {
+      rankingBottom.appendChild(item);
+    }
   });
   // 作成ボタン
   document.getElementById('create-user-btn').addEventListener('click', handleCreateUser);
-
 }
 
 // 追加: 履歴のページング/無限スクロール実装
