@@ -207,10 +207,79 @@ function switchTab(tabName, navItem) {
   });
 }
 
+// ロックボタンとselectタブの初期化
+function initGameTypeLock() {
+  const isLocked = localStorage.getItem('gameTypeLocked') === 'true';
+  const savedGameType = localStorage.getItem('selectedGameType');
+  const lockToggle = document.getElementById('lock-toggle');
+  const gameTypeSelect = document.getElementById('game-type');
+  const options = document.querySelectorAll('#game-type option');
+
+  if (lockToggle && gameTypeSelect) {
+    // ロック状態を復元
+    if (isLocked) {
+      lockToggle.checked = true;
+
+      // 保存されたゲームタイプを復元
+      if (savedGameType) {
+        gameTypeSelect.value = savedGameType;
+      }
+
+      // ロック状態を適用
+      if (isLocked) {
+        const selectedValue = savedGameType;
+        options.forEach(function (opt) {
+          if (selectedValue !== opt.value) {
+            opt.disabled = true;
+          } else {
+            opt.disabled = false;
+            opt.selected = true;
+          }
+        });
+      }
+    }
+  }
+}
+
+// ロックボタンの状態でselectタブのオプションを固定化
+function lockSelect() {
+  const btn = document.getElementById('lock-toggle');
+  const select = document.getElementById('game-type');
+  const option = document.querySelectorAll('#game-type option');
+
+  if (btn.checked) {
+    option.forEach(function (opt) {
+      if (select.value !== opt.value) {
+        opt.disabled = true;
+      } else {
+        opt.disabled = false;
+        opt.selected = true;
+      }
+    });
+
+    localStorage.setItem('gameTypeLocked', true);
+    localStorage.setItem('selectedGameType', select.value);
+
+    showNotification('ゲーム名をロックしました');
+  } else {
+    option.forEach(function (opt) {
+      opt.disabled = false;
+    });
+
+    localStorage.setItem('gameTypeLocked', false);
+    localStorage.setItem('selectedGameType', '');
+
+    showNotification('ゲーム名のロックを解除しました');
+  }
+}
+
 // Initialize event listeners
 document.addEventListener('DOMContentLoaded', function () {
   // ダークモードの初期化
   initDarkMode();
+
+  // ゲームタイプロックの初期化
+  initGameTypeLock();
 
   // 初期表示時にダッシュボードを読み込み
   loadDashboard();
@@ -241,26 +310,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
-
-
-// ロックボタンの状態でselectタブのオプションを固定化
-function lockSelect() {
-  const btn = document.getElementById('lock-toggle');
-  const select = document.getElementById('game-type');
-  const option = document.querySelectorAll('#game-type option');
-
-  if (btn.checked) {
-    option.forEach(function (opt) {
-      if (select.value !== opt.value) {
-        opt.disabled = true;
-      } else {
-        opt.disabled = false;
-        opt.selected = true;
-      }
-    });
-  } else {
-    option.forEach(function (opt) {
-      opt.disabled = false;
-    });
-  }
-}
