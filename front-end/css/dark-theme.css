@@ -67,6 +67,17 @@ body.dark-mode .btn-outline:hover {
   color: #000;
 }
 
+body.dark-mode label[for="lock-toggle"] {
+  border-color: #90caf9;
+  color: #90caf9;
+  background: #2d2d2d;
+}
+
+body.dark-mode #lock-toggle:checked+label[for="lock-toggle"] {
+  background: #90caf9;
+  color: #000;
+}
+
 body.dark-mode .ranking-number {
   background: #90caf9;
   color: #000;
