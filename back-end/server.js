@@ -69,7 +69,11 @@ const createTransactionHandler = type => {
     const user = users.find(u => u.id === id);
     if (!user) return res.status(404).json({ error: 'ID not found' });
 
-    user.balance += type === 'add' ? num : -num; // 加算 or 減算
+    // 商品交換時の出金はランキングに表示されるポイント数を変更しない
+    if (!(games === 'exchange' && type === 'subtract')) {
+      user.balance += type === 'add' ? num : -num; // 加算 or 減算
+    }
+    user.exchangeableBalance += type === 'add' ? num : -num; // 出金可能残高を更新
 
     history.unshift({
       timestamp: new Date().toISOString(),
@@ -77,7 +81,8 @@ const createTransactionHandler = type => {
       games,
       type,
       amount: num, // 常に正数で保存
-      balance: user.balance
+      balance: user.balance,
+      exchangeableBalance: user.exchangeableBalance
     });
 
     saveJSON(usersFile, users);
