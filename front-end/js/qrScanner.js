@@ -1,241 +1,213 @@
-// ===== QR Scanner (jsQR) =====
+// ===== 強化版 QR Scanner (jsQR, rAF, willReadFrequently, カメラ切替) =====
 let qrStream = null;
-let qrTrackList = [];
+let qrVideoTrackList = [];
 let qrDeviceIds = [];
 let qrCurrentIndex = 0;
 let qrTicking = false;
 
-const qrScanner = document.getElementById('qr-scanner');
+// 既存DOM: モーダル/ビデオ/キャンバス/ステータス
+const qrModal = document.getElementById('qr-scanner-modal');
 const qrVideo = document.getElementById('qr-video');
 const qrCanvas = document.getElementById('qr-canvas');
-const qrOverlay = document.getElementById('qr-overlay');
-const qrStopBtn = document.getElementById('qr-stop-btn');
-const qrSwitchBtn = document.getElementById('qr-switch-btn');
+const qrStatus = document.getElementById('scanner-status');
 
-const qrIdle = document.getElementById('qr-idle');
+//（任意）カメラ切替ボタンを使う場合は、HTMLに id="qrSwitchBtn" を置く
+const qrSwitchBtn = document.getElementById('qr-switch-btn');
 
 function enumerateCameras() {
   return navigator.mediaDevices.enumerateDevices()
-    .then((devices) => {
+    .then(devices => {
       const videos = devices.filter(d => d.kind === 'videoinput');
       qrDeviceIds = videos.map(v => v.deviceId);
-      // 背面カメラらしきデバイスを優先（environment）
-      if (qrDeviceIds.length > 1) {
-        const envIdx = videos.findIndex(v => /back|environment/i.test(v.label));
-        if (envIdx >= 0) qrCurrentIndex = envIdx;
-      }
-    });
-}
-
-function startQrScanner() {
-  // 1. まず簡易許可プリフライト（iOS対策&ユーザーに権限ダイアログを出す）
-  function warmup(constraints) {
-    return navigator.mediaDevices.getUserMedia(constraints)
-      .then((s) => {
-        s.getTracks().forEach(t => t.stop()); // すぐ止める
-        return true;
-      });
-  }
-
-  // 2. 使いやすいメッセージに変換
-  function humanizeError(err) {
-    const name = (err && (err.name || err.code)) || '';
-    switch (name) {
-      case 'NotAllowedError':
-      case 'PermissionDeniedError':
-        return 'カメラの使用がブロックされています。サイトの権限から「カメラを許可」に変更してください。';
-      case 'NotFoundError':
-      case 'DevicesNotFoundError':
-        return 'カメラデバイスが見つかりません。実機で、または外付けカメラ接続後に再試行してください。';
-      case 'NotReadableError':
-      case 'TrackStartError':
-        return 'カメラを占有している別アプリがある可能性があります。ほかのアプリ/タブを閉じてください。';
-      case 'OverconstrainedError':
-      case 'ConstraintNotSatisfiedError':
-        return '指定したカメラ制約に合致するデバイスがありません。カメラ切替でお試しください。';
-      case 'SecurityError':
-        return '安全なコンテキストが必要です。HTTPSでアクセスするか、ローカルは http://localhost を使用してください。';
-      default:
-        return `不明なエラーです（${name || 'no-name'}）。ページを再読込して再試行してください。`;
-    }
-  }
-
-  // 3. 実処理
-  return enumerateCameras()
-    .then(() => {
-      const tryOrders = [
-        { audio: false, video: { facingMode: { ideal: 'environment' } } },
-        qrDeviceIds.length ? { audio: false, video: { deviceId: { exact: qrDeviceIds[qrCurrentIndex] } } } : null
-      ].filter(Boolean);
-
-      let lastErr = null;
-
-      function tryAt(i) {
-        if (i >= tryOrders.length) {
-          return Promise.reject(lastErr || new Error('Unknown getUserMedia error'));
-        }
-        const constraints = tryOrders[i];
-
-        return warmup(constraints)
-          .then(() => navigator.mediaDevices.getUserMedia(constraints))
-          .then((stream) => {
-            qrStream = stream;
-            qrTrackList = qrStream.getVideoTracks();
-
-            qrVideo.srcObject = qrStream;
-            return qrVideo.play();
-          })
-          .then(() => {
-            qrVideo.style.display = 'block';
-            qrOverlay.style.display = 'block';
-            qrIdle.style.display = 'none';
-
-            qrTicking = true;
-            tickQr();
-            showNotification('スキャンを開始しました');
-            return; // 成功
-          })
-          .catch((err) => {
-            lastErr = err;
-            return tryAt(i + 1); // 次の方法で再試行
-          });
-      }
-
-      return tryAt(0);
+      // 背面(environment/back) っぽいデバイスを優先
+      const envIdx = videos.findIndex(v => /back|environment/i.test(v.label));
+      if (envIdx >= 0) qrCurrentIndex = envIdx;
     })
-    .catch((err) => {
-      const msg = humanizeError(err);
-      showNotification(`カメラを起動できません: ${msg}`, 'error');
-      console.error('[QR] getUserMedia failed:', err);
-      throw err;
+    .catch(e => {
+      // 取得できない環境(iOSの初回など)は後続の getUserMedia で権限付与後に再取得
+      qrDeviceIds = [];
     });
 }
 
-function stopQrScanner() {
-  qrTicking = false;
-  if (qrTrackList) {
-    qrTrackList.forEach(t => t.stop());
-  }
-  qrStream = null;
-  qrVideo.srcObject = null;
+// モーダルを開いてスキャナ開始（= 旧 openQRScanner 相当）
+function openQRScanner() {
+  qrModal.classList.add('active');
+  qrStatus.textContent = 'カメラの前にQRコードをかざしてください';
+  qrStatus.className = 'scanner-status';
 
-  qrVideo.style.display = 'none';
-  qrOverlay.style.display = 'none';
-  qrIdle.style.display = 'block';
+  return startQRScanning().catch(err => {
+    qrStatus.textContent = 'カメラへのアクセスが拒否または失敗しました';
+    qrStatus.className = 'scanner-status error';
+    console.error('[QR] start failed:', err);
+  });
 }
 
-function switchCamera() {
-  if (!qrDeviceIds.length) return;
-  stopQrScanner();
-  qrCurrentIndex = (qrCurrentIndex + 1) % qrDeviceIds.length;
-  return startQrScanner();
-}
+// 実際の起動
+function startQRScanning() {
+  // 端末列挙（権限前はラベルが空のことがある）
+  return enumerateCameras().then(() => {
+    // 試行順：environment指定 → deviceId（列挙できた時のみ）
+    const tryOrders = [
+      { audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } } },
+      qrDeviceIds.length ? { audio: false, video: { deviceId: { exact: qrDeviceIds[qrCurrentIndex] } } } : null
+    ].filter(Boolean);
 
-function drawLine(ctx, begin, end) {
-  ctx.beginPath();
-  ctx.moveTo(begin.x, begin.y);
-  ctx.lineTo(end.x, end.y);
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--qr-line') || '#00e676';
-  ctx.stroke();
+    let lastErr = null;
+    let i = 0;
+
+    const tryNext = () => {
+      if (i >= tryOrders.length) {
+        return Promise.reject(lastErr || new Error('getUserMedia failed'));
+      }
+
+      const constraints = tryOrders[i++];
+      return navigator.mediaDevices.getUserMedia(constraints)
+        .then(stream => {
+          // いったん成功したらそれを使う
+          qrStream = stream;
+          qrVideoTrackList = qrStream.getVideoTracks();
+
+          qrVideo.srcObject = qrStream;
+
+          // メタデータ待ち
+          return new Promise(resolve => {
+            if (qrVideo.readyState >= 1 && qrVideo.videoWidth > 0) return resolve();
+            qrVideo.onloadedmetadata = () => resolve();
+          })
+            .then(() => {
+              let playPromise;
+              try {
+                playPromise = qrVideo.play();
+              } catch (e) {
+                playPromise = Promise.resolve();
+              }
+              return Promise.resolve(playPromise).catch(e => { });
+            })
+            .then(() => {
+              // rAF でスキャン開始
+              qrTicking = true;
+              tickQr();
+
+              // 切替ボタン（任意）
+              if (qrSwitchBtn) {
+                qrSwitchBtn.style.display = qrDeviceIds.length > 1 ? 'flex' : 'none';
+                qrSwitchBtn.onclick = () => switchCamera().catch(() => { });
+              }
+            });
+        })
+        .catch(err => {
+          lastErr = err;
+          // 次の案へ
+          return tryNext();
+        });
+    };
+
+    return tryNext();
+  });
 }
 
 function tickQr() {
   if (!qrTicking) return;
 
   if (qrVideo.readyState === qrVideo.HAVE_ENOUGH_DATA) {
-    const width = qrVideo.videoWidth;
-    const height = qrVideo.videoHeight;
+    const vw = qrVideo.videoWidth;
+    const vh = qrVideo.videoHeight;
 
-    // Canvasサイズを動画に合わせる
-    qrCanvas.width = width;
-    qrCanvas.height = height;
+    // パフォーマンス安定のため縮小して解析（幅 640 目安）
+    const targetW = Math.min(640, vw);
+    const scale = targetW / vw;
+    const targetH = Math.round(vh * scale);
+
+    // Canvas を毎回作り直さず固定サイズで再利用
+    if (qrCanvas.width !== targetW || qrCanvas.height !== targetH) {
+      qrCanvas.width = targetW;
+      qrCanvas.height = targetH;
+    }
 
     const ctx = qrCanvas.getContext('2d', { willReadFrequently: true });
-    ctx.drawImage(qrVideo, 0, 0, width, height);
-    const imageData = ctx.getImageData(0, 0, width, height);
+    // 現フレーム描画
+    ctx.drawImage(qrVideo, 0, 0, targetW, targetH);
 
-    // デコード
-    const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: 'dontInvert' });
+    // ピクセル取得
+    const imageData = ctx.getImageData(0, 0, targetW, targetH);
 
-    // 前の枠を消す
-    ctx.clearRect(0, 0, width, height);
-    ctx.drawImage(qrVideo, 0, 0, width, height);
+    // デコード（まずは dontInvert、必要に応じ attemptBoth）
+    const code = jsQR(imageData.data, imageData.width, imageData.height, {
+      inversionAttempts: 'dontInvert'
+    });
 
-    if (code) {
-      // 見つかった四隅を描画（オーバーレイ用途にcanvasを一時表示）
-      // ※ 見た目重視なら別Canvasを重ねる構成もOK
-      drawLine(ctx, code.location.topLeftCorner, code.location.topRightCorner);
-      drawLine(ctx, code.location.topRightCorner, code.location.bottomRightCorner);
-      drawLine(ctx, code.location.bottomRightCorner, code.location.bottomLeftCorner);
-      drawLine(ctx, code.location.bottomLeftCorner, code.location.topLeftCorner);
+    if (code && code.data) {
+      // 四隅ガイド（任意）
+      drawQrBox(ctx, code.location);
+      qrStatus.textContent = 'QRコードを検出しました！';
+      qrStatus.className = 'scanner-status success';
 
-      handleQrResult(code.data);
-      return; // 見つかったら停止（複数回発火防止）
+      // ストップして結果処理
+      const text = code.data;
+      closeQRScanner();
+      // あなたのアプリのログイン共通関数へ
+      const userIdInput = document.querySelector('input[placeholder="ユーザーIDを入力"]');
+      userIdInput.value = text;
+      handleUserSearch();
+      return;
     }
   }
-  // 次フレームへ
+
   requestAnimationFrame(tickQr);
 }
 
-function handleQrResult(text) {
-  stopQrScanner();
-
-  // ここでアプリの入力欄へ反映
-  const userIdInput = document.querySelector('input[placeholder="ユーザーIDを入力"]');
-  userIdInput.value = text;
-
-  showNotification('QRコードを読み取りました');
-
-  // 自動で検索実行（任意）
-  handleUserSearch();
+function drawQrBox(ctx, loc) {
+  const draw = (a, b) => {
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#00e676';
+    ctx.stroke();
+  };
+  draw(loc.topLeftCorner, loc.topRightCorner);
+  draw(loc.topRightCorner, loc.bottomRightCorner);
+  draw(loc.bottomRightCorner, loc.bottomLeftCorner);
+  draw(loc.bottomLeftCorner, loc.topLeftCorner);
 }
 
-// クリックで開始/停止
-qrScanner.addEventListener('click', (e) => {
-  // ボタン領域のクリックはここでは処理しない
-  if (e.target === qrStopBtn || e.target === qrSwitchBtn) return;
+// モーダル閉じて停止（= 旧 closeQRScanner 相当）
+function closeQRScanner() {
+  qrTicking = false;
 
-  if (!qrStream) {
-    startQrScanner().catch(() => {});
+  if (qrVideoTrackList && qrVideoTrackList.length) {
+    qrVideoTrackList.forEach(t => t.stop());
   }
-});
+  qrVideoTrackList = [];
+  qrStream = null;
+  qrVideo.srcObject = null;
 
-// 明示ボタン
-qrStopBtn.addEventListener('click', stopQrScanner);
-qrSwitchBtn.addEventListener('click', () => {
-  const p = switchCamera();
-  if (p && typeof p.then === 'function') p.catch(() => {});
-});
+  qrModal.classList.remove('active');
+}
 
-// iOSの権限プリフライト（必須ではない）
-if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-  // 何もしない（必要時に起動）
-} else {
-  // フォールバック: ファイルから読み取り
-  const fallback = document.createElement('input');
-  fallback.type = 'file';
-  fallback.accept = 'image/*';
-  fallback.capture = 'environment';
-  fallback.style.marginTop = '8px';
-  fallback.addEventListener('change', (evt) => {
-    const file = evt.target.files[0];
-    if (!file) return;
-    const img = new Image();
-    img.onload = () => {
-      qrCanvas.width = img.width;
-      qrCanvas.height = img.height;
-      const ctx = qrCanvas.getContext('2d', { willReadFrequently: true });
-      ctx.drawImage(img, 0, 0);
-      const imageData = ctx.getImageData(0, 0, img.width, img.height);
-      const code = jsQR(imageData.data, imageData.width, imageData.height);
-      if (code) {
-        handleQrResult(code.data);
-      } else {
-        showNotification('QRを認識できませんでした', 'error');
-      }
-    };
-    img.src = URL.createObjectURL(file);
+// カメラ切替（任意で使う）
+async function switchCamera() {
+  if (!qrDeviceIds.length) return;
+  qrCurrentIndex = (qrCurrentIndex + 1) % qrDeviceIds.length;
+
+  // いったん停止して再起動
+  if (qrVideoTrackList && qrVideoTrackList.length) {
+    qrVideoTrackList.forEach(t => t.stop());
+  }
+  qrVideoTrackList = [];
+  qrStream = null;
+  qrVideo.srcObject = null;
+
+  // deviceId 指定で再起動
+  const stream = await navigator.mediaDevices.getUserMedia({
+    audio: false,
+    video: { deviceId: { exact: qrDeviceIds[qrCurrentIndex] } }
   });
-  qrScanner.appendChild(fallback);
+
+  qrStream = stream;
+  qrVideoTrackList = qrStream.getVideoTracks();
+  qrVideo.srcObject = qrStream;
+
+  qrTicking = true;
+  requestAnimationFrame(tickQr);
 }

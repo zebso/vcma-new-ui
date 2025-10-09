@@ -3,9 +3,16 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const app = express();
+const https = require('https');
 
 const PORT = 3000;
-const HOST = '10.16.243.159';
+// const HOST = '10.16.243.159';
+const HOST = '192.168.10.113';
+
+const options = {
+  key: fs.readFileSync("../ssl/key.pem"),
+  cert: fs.readFileSync("../ssl/cert.pem"),
+};
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../front-end')));
@@ -181,8 +188,12 @@ app.get('/dealer', (req, res) => {
 });
 
 //サーバー立ち上げ
-app.listen(process.env.PORT || PORT, () => {
-  console.log(`The server started on port ${PORT}`);
-  console.log(`Local server is running at http://localhost:${PORT}/`);
-  console.log(`Network server is running at http://${HOST}:${PORT}/`);
+// app.listen(process.env.PORT || PORT, () => {
+//   console.log(`The server started on port ${PORT}`);
+//   console.log(`Local server is running at http://localhost:${PORT}/`);
+//   console.log(`Network server is running at http://${HOST}:${PORT}/`);
+// });
+
+https.createServer(options, app).listen(PORT, HOST, () => {
+  console.log(`✅ HTTPS server started at https://${HOST}:${PORT}`);
 });

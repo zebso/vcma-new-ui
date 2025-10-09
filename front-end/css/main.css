@@ -470,6 +470,100 @@ nav {
   margin-bottom: 16px;
 }
 
+.qr-scanner-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.qr-scanner-modal.active {
+  display: flex;
+}
+
+.qr-scanner-container {
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+}
+
+.qr-scanner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.qr-scanner-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.close-scanner {
+  background: #f7fafc;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.close-scanner:hover {
+  background: #e2e8f0;
+}
+
+.close-scanner .material-icons {
+  font-size: 20px;
+  color: #4a5568;
+}
+
+#qr-video {
+  width: 100%;
+  border-radius: 16px;
+  background: #000;
+}
+
+.scanner-status {
+  text-align: center;
+  margin-top: 16px;
+  color: #718096;
+  font-size: 14px;
+}
+
+.scanner-status.success {
+  color: #48bb78;
+  font-weight: 600;
+}
+
+.scanner-status.error {
+  color: #f56565;
+  font-weight: 600;
+}
+
+canvas {
+  display: none;
+}
+
+.camera-switch {
+  margin-top: 16px;
+  margin-inline: auto;
+  display: flex;
+}
+
 /* Dashboard Stats */
 .stats-grid {
   display: grid;
