@@ -1,5 +1,23 @@
 [
   {
+    "timestamp": "2025-10-09T12:58:43.753Z",
+    "id": "test3",
+    "games": "exchange",
+    "type": "subtract",
+    "amount": 100,
+    "balance": 10900,
+    "exchangeableBalance": 10800
+  },
+  {
+    "timestamp": "2025-10-09T12:55:44.467Z",
+    "id": "test3",
+    "games": "blackjack",
+    "type": "subtract",
+    "amount": 100,
+    "balance": 10900,
+    "exchangeableBalance": 10900
+  },
+  {
     "timestamp": "2025-10-01T14:07:19.554Z",
     "id": "CC-2025-0NS9EN",
     "games": "blackjack",

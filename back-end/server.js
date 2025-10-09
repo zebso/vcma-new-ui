@@ -50,7 +50,7 @@ app.get('/api/balance/:id', (req, res) => {
   const users = loadJSON(usersFile);
   const user = users.find(u => u.id === req.params.id);
   if (!user) return res.status(404).json({ error: 'ID not found' });
-  res.json({ id: user.id, balance: user.balance })
+  res.json({ id: user.id, balance: user.balance, exchangeableBalance: user.exchangeableBalance })
 });
 
 // 共通トランザクション処理
@@ -89,7 +89,7 @@ const createTransactionHandler = type => {
     saveJSON(historyFile, history);
     updateRanking();
 
-    res.json({ success: true, balance: user.balance });
+    res.json({ success: true, balance: user.balance, exchangeableBalance: user.exchangeableBalance });
   };
 }
 
@@ -139,7 +139,7 @@ app.post('/api/users', (req, res) => {
       type: 'generate',
       amount: user.balance,
       balance: user.balance,
-      dealer: ''
+      exchangeableBalance: user.balance
     });
     saveJSON(historyFile, history);
     updateRanking();

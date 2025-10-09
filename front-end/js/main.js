@@ -1,6 +1,7 @@
 // Global state
 let currentUserId = null;
 let currentBalance = 0;
+let currentExchangeableBalance = 0;
 let isLoading = false;
 
 // API Base URL (プロダクションでは実際のサーバーのURLに変更)
@@ -86,7 +87,7 @@ function handleUserSearch() {
   getBalance(userId)
     .then((userData) => {
       currentUserId = userData.id;
-      updateBalanceDisplay(userData.balance);
+      updateBalanceDisplay(userData.balance, userData.exchangeableBalance);
       showNotification(`ユーザー ${userId} を読み込みました`);
     })
     .catch((error) => {
@@ -96,7 +97,7 @@ function handleUserSearch() {
           createUser(userId, 0)
             .then((newUser) => {
               currentUserId = newUser.user.id;
-              updateBalanceDisplay(newUser.user.balance);
+              updateBalanceDisplay(newUser.user.balance, newUser.user.exchangeableBalance);
               showNotification(`新規ユーザー ${userId} を作成しました`);
             })
             .catch((createError) => {
@@ -129,7 +130,7 @@ function handleMoneyChange(isAdd) {
 
   request
     .then((result) => {
-      updateBalanceDisplay(result.balance);
+      updateBalanceDisplay(result.balance, result.exchangeableBalance);
       amountInput.value = '';
       if (gameInput) gameInput.value = '';
       showNotification(`${isAdd ? '追加' : '減算'}が完了しました`);

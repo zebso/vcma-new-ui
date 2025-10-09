@@ -1,8 +1,9 @@
 // UI Update functions
-function updateBalanceDisplay(balance) {
+function updateBalanceDisplay(balance, exchangeableBalance) {
   const balanceElement = document.querySelector('.balance-amount');
-  balanceElement.textContent = formatCurrency(balance);
+  balanceElement.innerHTML = `${formatCurrency(balance)} <br><span>(商品交換可能：${formatCurrency(exchangeableBalance)})</span>`;
   currentBalance = balance;
+  currentExchangeableBalance = exchangeableBalance;
 }
 
 function handleCreateUser() {

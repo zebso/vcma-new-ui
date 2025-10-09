@@ -96,6 +96,11 @@ header h1 {
   margin-bottom: 8px;
 }
 
+.balance-amount span {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
 .balance-label {
   font-size: 14px;
   opacity: 0.9;
