@@ -56,7 +56,7 @@ app.get('/api/balance/:id', (req, res) => {
 // 共通トランザクション処理
 const createTransactionHandler = type => {
   return (req, res) => {
-    const { id, amount, games, dealer } = req.body || {};
+    const { id, amount, games } = req.body || {};
     const num = Number(amount);
 
     // 最低限のバリデーション（フロントと挙動変えない: エラー時 success:false ではなく既存通りエラーレスポンス）
@@ -77,8 +77,7 @@ const createTransactionHandler = type => {
       games,
       type,
       amount: num, // 常に正数で保存
-      balance: user.balance,
-      dealer
+      balance: user.balance
     });
 
     saveJSON(usersFile, users);
