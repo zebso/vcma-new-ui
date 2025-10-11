@@ -6,7 +6,6 @@ const app = express();
 const https = require('https');
 
 const PORT = 3000;
-// const HOST = '10.16.243.159';
 const HOST = '192.168.10.113';
 
 const options = {
@@ -187,13 +186,7 @@ app.get('/dealer', (req, res) => {
   res.sendFile(path.join(__dirname, '../front-end/pages', 'dealer.html'));
 });
 
-//サーバー立ち上げ
-// app.listen(process.env.PORT || PORT, () => {
-//   console.log(`The server started on port ${PORT}`);
-//   console.log(`Local server is running at http://localhost:${PORT}/`);
-//   console.log(`Network server is running at http://${HOST}:${PORT}/`);
-// });
-
+// サーバー起動
 https.createServer(options, app).listen(PORT, HOST, () => {
-  console.log(`✅ HTTPS server started at https://${HOST}:${PORT}`);
+  console.log(`HTTPS server started at https://${HOST}:${PORT}`);
 });
