@@ -284,8 +284,6 @@ function buttonStateUpdater() {
 
 // Initialize event listeners
 document.addEventListener('DOMContentLoaded', function () {
-  // ダークモードの初期化
-  initDarkMode();
 
   // 初期表示時にダッシュボードを読み込み
   loadDashboard().then(() => initGameTypeLock());
@@ -302,8 +300,6 @@ document.addEventListener('DOMContentLoaded', function () {
   addBtn.addEventListener('click', () => handleMoneyChange(true));
   subtractBtn.addEventListener('click', () => handleMoneyChange(false));
 
-  // ダークモードトグル
-  document.getElementById('dark-mode-toggle').addEventListener('change', toggleDarkMode);
   // Button interactions
   document.querySelectorAll('.btn').forEach(btn => {
     btn.addEventListener('click', function () {
