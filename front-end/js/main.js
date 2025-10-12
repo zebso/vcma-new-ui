@@ -165,7 +165,7 @@ function loadHistory() {
 }
 
 function loadDashboard() {
-  getDashboardStats()
+  return getDashboardStats()
     .then((stats) => {
       updateDashboardDisplay(stats);
     })
@@ -228,6 +228,13 @@ function initGameTypeLock() {
       // 保存されたゲームタイプを復元
       if (savedGameType) {
         gameTypeSelect.value = savedGameType;
+
+        // ゲームタイプがexchangeのときは追加ボタンを無効化
+        if (savedGameType === 'exchange') {
+          const addBtn = document.getElementById('add-amount-btn');
+          addBtn.disabled = true;
+          addBtn.style.opacity = '0.3';
+        }
       }
 
       // ロック状態を適用
@@ -278,16 +285,26 @@ function lockSelect() {
   }
 }
 
+// ゲームタイプがexchangeのときは追加ボタンを無効化
+function buttonStateUpdater() {
+  const select = document.getElementById('game-type');
+  const addBtn = document.getElementById('add-amount-btn');
+  if (select.value === 'exchange') {
+    addBtn.disabled = true;
+    addBtn.style.opacity = '0.3';
+  } else {
+    addBtn.disabled = false;
+    addBtn.style.opacity = '1';
+  }
+}
+
 // Initialize event listeners
 document.addEventListener('DOMContentLoaded', function () {
   // ダークモードの初期化
   initDarkMode();
 
-  // ゲームタイプロックの初期化
-  initGameTypeLock();
-
   // 初期表示時にダッシュボードを読み込み
-  loadDashboard();
+  loadDashboard().then(() => initGameTypeLock());
   // Search button
   const searchBtn = document.querySelector(
     '.input-section button.btn:not(#qr-stop-btn):not(#qr-switch-btn)'
