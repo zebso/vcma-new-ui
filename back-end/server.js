@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const http = require('http');
+const app = express();
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 // const HOST = '10.16.243.159';
