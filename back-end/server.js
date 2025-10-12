@@ -15,7 +15,8 @@ const GAME_LIMITS = {
   'poker': 500,
   'blackjack': 400,
   'roulette': 300,
-  'slot': 200,
+  'ring-toss': 200,
+  'shooting': 200,
   'exchange': 1000, // 商品交換は1IDあたりの上限
   // デフォルト（ゲーム指定なし）
   'default': 100
@@ -78,8 +79,8 @@ app.get('/api/balance/:id', (req, res) => {
   const user = users.find(u => u.id === req.params.id);
   if (!user) return res.status(404).json({ error: 'ID not found' });
   // 安全な既定値
-  if (typeof user.exchangeableBalance !== 'number') {
-    user.exchangeableBalance = Number(user.exchangeableBalance || user.balance || 0);
+  if (typeof user.exchangedAmount !== 'number') {
+    user.exchangedAmount = Number(user.exchangedAmount || 0);
     saveJSON(usersFile, users);
   }
   res.json({ id: user.id, balance: user.balance, exchangedAmount: user.exchangedAmount })
@@ -139,8 +140,8 @@ const createTransactionHandler = type => {
     }
 
     // 既定値（未定義対策）
-    if (typeof user.exchangeableBalance !== 'number') {
-      user.exchangeableBalance = Number(user.exchangeableBalance || user.balance || 0);
+    if (typeof user.exchangedAmount !== 'number') {
+      user.exchangedAmount = Number(user.exchangedAmount || user.balance || 0);
     }
 
     // 商品交換時の出金はランキング対象 balance を変えない
@@ -202,7 +203,7 @@ app.post('/api/users', (req, res) => {
     if (isNaN(bal) || bal < 0) bal = 0;
     bal = Math.floor(bal);
 
-    const user = { id: newId, balance: bal, exchangeableBalance: bal, createdAt: new Date().toISOString() };
+    const user = { id: newId, balance: bal, exchangedAmount: 0, createdAt: new Date().toISOString() };
     users.push(user);
     saveJSON(usersFile, users);
 

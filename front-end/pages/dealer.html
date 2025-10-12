@@ -7,10 +7,9 @@
   <title>所持金管理アプリ</title>
   <link rel="stylesheet" href="../css/import.css">
   <link rel="manifest" href="/manifest/manifest.json">
-<meta name="theme-color" content="#111827">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
+  <meta name="theme-color" content="#111827">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 
 <script>
@@ -83,9 +82,9 @@
                 <option value="">選択してください</option>
                 <option value="blackjack">ブラックジャック</option>
                 <option value="poker">ポーカー</option>
-                <option value="baccarat">バカラ</option>
                 <option value="roulette">ルーレット</option>
-                <option value="slot">スロット</option>
+                <option value="shooting">射的</option>
+                <option value="ring-toss">輪投げ</option>
                 <option value="exchange">商品交換</option>
                 <option value="other">その他</option>
               </select>
@@ -155,15 +154,16 @@
           <div>履歴を読み込み中...</div>
         </div>
       </div>
-      
+
       <div class="tab-content" id="dev">
-       <h3 style="margin-bottom: 20px;">開発者向けツール</h3>
+        <h3 style="margin-bottom: 20px;">開発者向けツール</h3>
         <div class="input-section content-box">
           <h3 style="margin-bottom: 16px;">ユーザー複数追加</h3>
 
           <div class="input-group">
             <label>ユーザーID</label>
-            <textarea type="text" style="height: 100px;" class="input-field" id="new-user-id-dev" placeholder="例: CC-2025-XXXXX（改行で複数ユーザー追加）"></textarea>
+            <textarea type="text" style="height: 100px;" class="input-field" id="new-user-id-dev"
+              placeholder="例: CC-2025-XXXXX（改行で複数ユーザー追加）"></textarea>
           </div>
 
           <div class="input-group">
@@ -178,7 +178,8 @@
 
           <div class="input-group" style="margin-bottom: 0;">
             <label>CSS</label>
-            <textarea type="text" style="height: 100px;" class="input-field" id="css-dev" placeholder="cssを入力"></textarea>
+            <textarea type="text" style="height: 100px;" class="input-field" id="css-dev"
+              placeholder="cssを入力"></textarea>
           </div>
         </div>
       </div>
