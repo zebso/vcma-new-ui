@@ -150,3 +150,38 @@ body.dark-mode .stat-label {
 body.dark-mode .history-user {
   color: #90caf9;
 }
+
+/* ダークモード用 QRスキャナー */
+body.dark-mode .qr-scanner-container {
+  background: #2d2d2d;
+}
+
+body.dark-mode .qr-scanner-title {
+  color: #ffffff;
+}
+
+body.dark-mode .close-scanner {
+  background: #3d3d3d;
+}
+
+body.dark-mode .close-scanner:hover {
+  background: #4d4d4d;
+}
+
+body.dark-mode .close-scanner .material-icons {
+  color: #b0b0b0;
+}
+
+body.dark-mode .scanner-status {
+  color: #b0b0b0;
+}
+
+body.dark-mode .scanner-status.success {
+  color: #81c784;
+  font-weight: 600;
+}
+
+body.dark-mode .scanner-status.error {
+  color: #ef5350;
+  font-weight: 600;
+}

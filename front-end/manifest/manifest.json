@@ -1,0 +1,10 @@
+{
+  "name": "CC Dashboard",
+  "short_name": "CC",
+  "start_url": "/dealer?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#111827",
+  "lang": "ja"
+}
