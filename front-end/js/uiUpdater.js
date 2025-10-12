@@ -150,6 +150,13 @@ function ensureHistoryObserver(container) {
 
     if (_histIndex < _histAll.length) {
       renderNextHistoryBatch(container);
+
+      // 2度目以降はスクロール位置がずれるのでsentinelを再配置
+      if (_histSentinel && _histSentinel.parentNode) {
+        // sentinelを末尾に移動
+        _histSentinel.parentNode.removeChild(_histSentinel);
+        container.appendChild(_histSentinel);
+      }
     }
 
     // 出し切ったら後片付け
