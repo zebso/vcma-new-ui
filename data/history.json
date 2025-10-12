@@ -1,12 +1,48 @@
 [
   {
+    "timestamp": "2025-10-12T01:47:52.984Z",
+    "id": "test3",
+    "games": "exchange",
+    "type": "subtract",
+    "amount": 300,
+    "balance": 11100,
+    "exchangedAmount": 1000
+  },
+  {
+    "timestamp": "2025-10-12T01:47:47.252Z",
+    "id": "test3",
+    "games": "exchange",
+    "type": "subtract",
+    "amount": 500,
+    "balance": 11100,
+    "exchangedAmount": 700
+  },
+  {
+    "timestamp": "2025-10-12T01:47:38.830Z",
+    "id": "test3",
+    "games": "exchange",
+    "type": "subtract",
+    "amount": 100,
+    "balance": 11100,
+    "exchangedAmount": 200
+  },
+  {
+    "timestamp": "2025-10-12T01:47:28.559Z",
+    "id": "test3",
+    "games": "blackjack",
+    "type": "add",
+    "amount": 100,
+    "balance": 11100,
+    "exchangedAmount": 100
+  },
+  {
     "timestamp": "2025-10-09T14:42:10.842Z",
     "id": "test3",
     "games": "poker",
     "type": "add",
     "amount": 100,
     "balance": 11000,
-    "exchangeableBalance": 10900
+    "exchangedAmount": 100
   },
   {
     "timestamp": "2025-10-09T12:58:43.753Z",
@@ -15,7 +51,7 @@
     "type": "subtract",
     "amount": 100,
     "balance": 10900,
-    "exchangeableBalance": 10800
+    "exchangedAmount": 100
   },
   {
     "timestamp": "2025-10-09T12:55:44.467Z",
@@ -24,7 +60,7 @@
     "type": "subtract",
     "amount": 100,
     "balance": 10900,
-    "exchangeableBalance": 10900
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-10-01T14:07:19.554Z",
@@ -33,7 +69,7 @@
     "type": "subtract",
     "amount": 100,
     "balance": 1100,
-    "exchangeableBalance": 1100
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-09-21T07:27:47.065Z",
@@ -42,7 +78,7 @@
     "type": "add",
     "amount": 1000,
     "balance": 11000,
-    "exchangeableBalance": 11000
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-09-21T07:27:31.272Z",
@@ -51,7 +87,7 @@
     "type": "generate",
     "amount": 10000,
     "balance": 10000,
-    "exchangeableBalance": 10000
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-09-21T07:25:59.016Z",
@@ -60,7 +96,7 @@
     "type": "generate",
     "amount": 1000,
     "balance": 1000,
-    "exchangeableBalance": 1000
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-09-21T07:24:54.480Z",
@@ -69,7 +105,7 @@
     "type": "generate",
     "amount": 0,
     "balance": 0,
-    "exchangeableBalance": 0
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-09-21T06:56:52.445Z",
@@ -78,7 +114,7 @@
     "type": "generate",
     "amount": 100,
     "balance": 100,
-    "exchangeableBalance": 100
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-09-21T02:31:16.773Z",
@@ -87,7 +123,7 @@
     "type": "add",
     "amount": 600,
     "balance": 1200,
-    "exchangeableBalance": 1200
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-09-19T15:50:30.992Z",
@@ -96,7 +132,7 @@
     "type": "add",
     "amount": 300,
     "balance": 600,
-    "exchangeableBalance": 600
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-09-19T15:46:21.749Z",
@@ -105,7 +141,7 @@
     "type": "subtract",
     "amount": 1000,
     "balance": 300,
-    "exchangeableBalance": 300
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-09-19T15:42:28.392Z",
@@ -114,7 +150,7 @@
     "type": "add",
     "amount": 500,
     "balance": 1300,
-    "exchangeableBalance": 1300
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-09-19T01:48:11.668Z",
@@ -123,7 +159,7 @@
     "type": "generate",
     "amount": 100,
     "balance": 100,
-    "exchangeableBalance": 100
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-09-15T09:01:32.302Z",
@@ -132,7 +168,7 @@
     "type": "add",
     "amount": 100,
     "balance": 800,
-    "exchangeableBalance": 800
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-29T12:02:55.589Z",
@@ -141,7 +177,7 @@
     "type": "subtract",
     "amount": 100,
     "balance": 700,
-    "exchangeableBalance": 700
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-29T12:02:27.630Z",
@@ -150,7 +186,7 @@
     "type": "add",
     "amount": 100,
     "balance": 800,
-    "exchangeableBalance": 800
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-28T01:05:50.494Z",
@@ -159,7 +195,7 @@
     "type": "subtract",
     "amount": 100,
     "balance": 700,
-    "exchangeableBalance": 700
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-22T12:03:10.334Z",
@@ -168,7 +204,7 @@
     "type": "add",
     "amount": 100,
     "balance": 800,
-    "exchangeableBalance": 800
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-22T12:03:10.324Z",
@@ -177,7 +213,7 @@
     "type": "add",
     "amount": 100,
     "balance": 700,
-    "exchangeableBalance": 700
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-22T12:02:54.252Z",
@@ -186,7 +222,7 @@
     "type": "add",
     "amount": 100,
     "balance": 600,
-    "exchangeableBalance": 600
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-22T11:33:37.661Z",
@@ -195,7 +231,7 @@
     "type": "add",
     "amount": 100,
     "balance": 500,
-    "exchangeableBalance": 500
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-22T11:33:05.064Z",
@@ -204,7 +240,7 @@
     "type": "add",
     "amount": 100,
     "balance": 400,
-    "exchangeableBalance": 400
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-21T00:54:57.554Z",
@@ -213,7 +249,7 @@
     "type": "generate",
     "amount": 100,
     "balance": 100,
-    "exchangeableBalance": 100
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-21T00:54:56.773Z",
@@ -222,7 +258,7 @@
     "type": "generate",
     "amount": 100,
     "balance": 100,
-    "exchangeableBalance": 100
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-21T00:54:55.864Z",
@@ -231,7 +267,7 @@
     "type": "generate",
     "amount": 100,
     "balance": 100,
-    "exchangeableBalance": 100
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-21T00:25:55.123Z",
@@ -240,7 +276,7 @@
     "type": "add",
     "amount": 100,
     "balance": 200,
-    "exchangeableBalance": 200
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-20T15:06:47.607Z",
@@ -249,7 +285,7 @@
     "type": "add",
     "amount": 100,
     "balance": 300,
-    "exchangeableBalance": 300
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-20T15:02:50.700Z",
@@ -258,7 +294,7 @@
     "type": "add",
     "amount": 100,
     "balance": 200,
-    "exchangeableBalance": 200
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-20T15:00:34.413Z",
@@ -267,7 +303,7 @@
     "type": "generate",
     "amount": 100,
     "balance": 100,
-    "exchangeableBalance": 100
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-20T14:59:34.892Z",
@@ -276,7 +312,7 @@
     "type": "generate",
     "amount": 100,
     "balance": 100,
-    "exchangeableBalance": 100
+    "exchangedAmount": 0
   },
   {
     "timestamp": "2025-08-20T14:43:26.626Z",
@@ -285,6 +321,6 @@
     "type": "generate",
     "amount": 100,
     "balance": 100,
-    "exchangeableBalance": 100
+    "exchangedAmount": 0
   }
 ]

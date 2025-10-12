@@ -1,7 +1,7 @@
 // Global state
 let currentUserId = null;
 let currentBalance = 0;
-let currentExchangeableBalance = 0;
+let currentExchangedAmount = 0;
 let isLoading = false;
 
 // API Base URL (プロダクションでは実際のサーバーのURLに変更)
@@ -87,7 +87,7 @@ function handleUserSearch() {
   getBalance(userId)
     .then((userData) => {
       currentUserId = userData.id;
-      updateBalanceDisplay(userData.balance, userData.exchangeableBalance);
+      updateBalanceDisplay(userData.balance, userData.exchangedAmount);
       showNotification(`ユーザー ${userId} を読み込みました`);
     })
     .catch((error) => {
@@ -97,7 +97,7 @@ function handleUserSearch() {
           createUser(userId, 0)
             .then((newUser) => {
               currentUserId = newUser.user.id;
-              updateBalanceDisplay(newUser.user.balance, newUser.user.exchangeableBalance);
+              updateBalanceDisplay(newUser.user.balance, newUser.user.exchangedAmount);
               showNotification(`新規ユーザー ${userId} を作成しました`);
             })
             .catch((createError) => {
@@ -130,9 +130,13 @@ function handleMoneyChange(isAdd) {
 
   request
     .then((result) => {
-      updateBalanceDisplay(result.balance, result.exchangeableBalance);
+      updateBalanceDisplay(result.balance, result.exchangedAmount);
       amountInput.value = '';
-      if (gameInput) gameInput.value = '';
+      // ゲーム名はロックされていなければクリア
+      const lockToggle = document.getElementById('lock-toggle');
+      if (gameInput && (!lockToggle || !lockToggle.checked)) {
+        gameInput.value = '';
+      }
       showNotification(`${isAdd ? '追加' : '減算'}が完了しました`);
     })
     .catch((error) => {

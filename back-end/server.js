@@ -13,6 +13,17 @@ const options = {
   cert: fs.readFileSync("../ssl/cert.pem"),
 };
 
+// ゲーム別の上限設定
+const GAME_LIMITS = {
+  'poker': 500,
+  'blackjack': 400,
+  'roulette': 300,
+  'slot': 200,
+  'exchange': 1000, // 商品交換は1IDあたりの上限
+  // デフォルト（ゲーム指定なし）
+  'default': 100
+};
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../front-end')));
 
@@ -56,7 +67,7 @@ app.get('/api/balance/:id', (req, res) => {
   const users = loadJSON(usersFile);
   const user = users.find(u => u.id === req.params.id);
   if (!user) return res.status(404).json({ error: 'ID not found' });
-  res.json({ id: user.id, balance: user.balance, exchangeableBalance: user.exchangeableBalance })
+  res.json({ id: user.id, balance: user.balance, exchangedAmount: user.exchangedAmount })
 });
 
 // 共通トランザクション処理
@@ -75,11 +86,34 @@ const createTransactionHandler = type => {
     const user = users.find(u => u.id === id);
     if (!user) return res.status(404).json({ error: 'ID not found' });
 
+    // 減算時のゲーム別上限チェック
+    if (type === 'subtract') {
+      if (games === 'exchange') {
+        if (user.exchangedAmount >= GAME_LIMITS['exchange']) {
+          return res.status(400).json({
+            error: `1人当たりの交換可能ポイント数${GAME_LIMITS['exchange'].toLocaleString()}を超えています`
+          });
+        }
+      } else {
+        const gameType = games || 'default';
+        const limit = GAME_LIMITS[gameType] || GAME_LIMITS['default'];
+
+        if (num > limit) {
+          return res.status(400).json({
+            error: `${gameType}の上限額${limit.toLocaleString()}を超えています`
+          });
+        }
+      }
+    }
+
     // 商品交換時の出金はランキングに表示されるポイント数を変更しない
     if (!(games === 'exchange' && type === 'subtract')) {
       user.balance += type === 'add' ? num : -num; // 加算 or 減算
     }
-    user.exchangeableBalance += type === 'add' ? num : -num; // 出金可能残高を更新
+
+    if (games === 'exchange' && type === 'subtract') {
+      user.exchangedAmount += num; // 商品交換済みポイントを更新
+    }
 
     history.unshift({
       timestamp: new Date().toISOString(),
@@ -88,14 +122,14 @@ const createTransactionHandler = type => {
       type,
       amount: num, // 常に正数で保存
       balance: user.balance,
-      exchangeableBalance: user.exchangeableBalance
+      exchangedAmount: user.exchangedAmount
     });
 
     saveJSON(usersFile, users);
     saveJSON(historyFile, history);
     updateRanking();
 
-    res.json({ success: true, balance: user.balance, exchangeableBalance: user.exchangeableBalance });
+    res.json({ success: true, balance: user.balance, exchangedAmount: user.exchangedAmount });
   };
 }
 
@@ -145,7 +179,7 @@ app.post('/api/users', (req, res) => {
       type: 'generate',
       amount: user.balance,
       balance: user.balance,
-      exchangeableBalance: user.balance
+      exchangedAmount: 0
     });
     saveJSON(historyFile, history);
     updateRanking();
