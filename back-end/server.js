@@ -239,7 +239,7 @@ app.get('/api/dashboard-stats', (req, res) => {
 });
 
 // --- Pages ---
-app.get('/', (req, res) => res.redirect('/user'));
+app.get('/', (req, res) => res.redirect('/dealer'));
 app.get('/user', (req, res) => res.sendFile(path.join(FRONT_DIR, 'pages', 'user.html')));
 app.get('/dealer', (req, res) => res.sendFile(path.join(FRONT_DIR, 'pages', 'dealer.html')));
 
