@@ -1,41 +1,5 @@
 [
   {
-    "timestamp": "2025-10-12T01:47:52.984Z",
-    "id": "test3",
-    "games": "exchange",
-    "type": "subtract",
-    "amount": 300,
-    "balance": 11100,
-    "exchangedAmount": 1000
-  },
-  {
-    "timestamp": "2025-10-12T01:47:47.252Z",
-    "id": "test3",
-    "games": "exchange",
-    "type": "subtract",
-    "amount": 500,
-    "balance": 11100,
-    "exchangedAmount": 700
-  },
-  {
-    "timestamp": "2025-10-12T01:47:38.830Z",
-    "id": "test3",
-    "games": "exchange",
-    "type": "subtract",
-    "amount": 100,
-    "balance": 11100,
-    "exchangedAmount": 200
-  },
-  {
-    "timestamp": "2025-10-12T01:47:28.559Z",
-    "id": "test3",
-    "games": "blackjack",
-    "type": "add",
-    "amount": 100,
-    "balance": 11100,
-    "exchangedAmount": 100
-  },
-  {
     "timestamp": "2025-10-09T14:42:10.842Z",
     "id": "test3",
     "games": "poker",

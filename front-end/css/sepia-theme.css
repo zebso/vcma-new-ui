@@ -1,0 +1,201 @@
+@charset "utf-8";
+
+body.sepia-mode {
+  background-color: #f4ecd8;
+  color: #5c4a3a;
+}
+
+/* その他のセピアモード用スタイル */
+body.sepia-mode .app-container {
+  background: #f9f3e3;
+  box-shadow: 0 0 20px rgba(101, 67, 33, 0.15);
+}
+
+body.sepia-mode header {
+  background: #ebe1ca;
+  box-shadow: 0 2px 4px rgba(101, 67, 33, 0.1);
+}
+
+body.sepia-mode header h1 {
+  color: #8b6914;
+}
+
+body.sepia-mode .content-box {
+  background: #f9f3e3;
+  box-shadow: 0 2px 4px rgba(101, 67, 33, 0.1);
+}
+
+body.sepia-mode .balance-card {
+  background: linear-gradient(135deg, #c9a961, #d4b76a);
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.3);
+}
+
+body.sepia-mode .input-group label {
+  color: #7a6550;
+}
+
+body.sepia-mode .input-field {
+  background-color: #fff9e6;
+  border-color: #d4c4a8;
+  color: #5c4a3a;
+}
+
+body.sepia-mode .input-field:focus {
+  border-color: #c9a961;
+}
+
+body.sepia-mode .btn {
+  background: #c9a961;
+  border-color: #c9a961;
+  color: #fff;
+}
+
+body.sepia-mode .btn:hover {
+  background: #b8964f;
+  border-color: #b8964f;
+}
+
+body.sepia-mode .btn-outline {
+  color: #c9a961;
+  border-color: #c9a961;
+  background: #f9f3e3;
+}
+
+body.sepia-mode .btn-outline:hover {
+  background: #c9a961;
+  color: #fff;
+}
+
+body.sepia-mode label[for="lock-toggle"] {
+  border-color: #c9a961;
+  color: #c9a961;
+  background: #f9f3e3;
+}
+
+body.sepia-mode #lock-toggle:checked+label[for="lock-toggle"] {
+  background: #c9a961;
+  color: #fff;
+}
+
+body.sepia-mode .ranking-number {
+  background: #c9a961;
+  color: #fff;
+}
+
+body.sepia-mode .ranking-name {
+  color: #7a6550;
+}
+
+body.sepia-mode .rank-1 {
+  box-shadow: 0 6px 20px rgba(218, 165, 32, 0.25);
+}
+
+body.sepia-mode .rank-2 {
+  box-shadow: 0 4px 12px rgba(169, 169, 169, 0.2);
+}
+
+body.sepia-mode .rank-3 {
+  box-shadow: 0 4px 12px rgba(205, 127, 50, 0.2);
+}
+
+body.sepia-mode .history-date {
+  color: #7a6550;
+}
+
+body.sepia-mode .history-amount.positive {
+  color: #6b8e23;
+}
+
+body.sepia-mode .history-amount.negative {
+  color: #cd5c5c;
+}
+
+body.sepia-mode nav {
+  background: #ebe1ca;
+  border-top-color: #d4c4a8;
+  box-shadow: 0 -2px 8px rgba(101, 67, 33, 0.1);
+}
+
+body.sepia-mode .nav-item {
+  color: #7a6550;
+}
+
+body.sepia-mode .nav-item.active {
+  color: #c9a961;
+}
+
+body.sepia-mode .qr-scanner {
+  border-color: #c9a961;
+  color: #c9a961;
+}
+
+body.sepia-mode .stat-card {
+  background: #f9f3e3;
+  box-shadow: 0 2px 8px rgba(101, 67, 33, 0.1);
+}
+
+body.sepia-mode .stat-card i {
+  color: #c9a961;
+}
+
+body.sepia-mode .stat-number {
+  color: #5c4a3a;
+}
+
+body.sepia-mode .stat-label {
+  color: #7a6550;
+}
+
+body.sepia-mode .history-user {
+  color: #c9a961;
+}
+
+@media (min-width: 768px) {
+  body.sepia-mode .nav-item.active {
+    background: #c9a96121;
+  }
+}
+
+body.sepia-mode input:checked+.slider {
+  background-color: #c9a961;
+}
+
+/* セピアモード用 QRスキャナー */
+body.sepia-mode .qr-scanner {
+  border-color: #c9a961;
+  color: #c9a961;
+}
+
+body.sepia-mode .qr-scanner-container {
+  background: #f9f3e3;
+}
+
+body.sepia-mode .qr-scanner-title {
+  color: #5c4a3a;
+}
+
+body.sepia-mode .close-scanner {
+  background: #ebe1ca;
+}
+
+body.sepia-mode .close-scanner:hover {
+  background: #d4c4a8;
+}
+
+body.sepia-mode .close-scanner .material-icons {
+  color: #7a6550;
+}
+
+body.sepia-mode .scanner-status {
+  color: #7a6550;
+}
+
+body.sepia-mode .scanner-status.success {
+  color: #6b8e23;
+  font-weight: 600;
+}
+
+body.sepia-mode .scanner-status.error {
+  color: #cd5c5c;
+  font-weight: 600;
+}

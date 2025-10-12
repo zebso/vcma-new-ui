@@ -64,5 +64,95 @@
     "balance": 11100,
     "exchangedAmount": 1000,
     "createdAt": "2025-09-21T07:27:31.270Z"
+  },
+  {
+    "id": "lama",
+    "balance": 100,
+    "exchangeableBalance": 100,
+    "createdAt": "2025-10-11T01:04:46.797Z"
+  },
+  {
+    "id": "lama2",
+    "balance": 100,
+    "exchangeableBalance": 100,
+    "createdAt": "2025-10-11T01:04:46.808Z"
+  },
+  {
+    "id": "lama3",
+    "balance": 100,
+    "exchangeableBalance": 100,
+    "createdAt": "2025-10-11T01:04:46.816Z"
+  },
+  {
+    "id": "mono",
+    "balance": 1000,
+    "exchangeableBalance": 1000,
+    "createdAt": "2025-10-11T01:06:07.255Z"
+  },
+  {
+    "id": "mono2",
+    "balance": 1000,
+    "exchangeableBalance": 1000,
+    "createdAt": "2025-10-11T01:06:07.258Z"
+  },
+  {
+    "id": "mono3",
+    "balance": 1000,
+    "exchangeableBalance": 1000,
+    "createdAt": "2025-10-11T01:06:07.262Z"
+  },
+  {
+    "id": "karma",
+    "balance": 222,
+    "exchangeableBalance": 222,
+    "createdAt": "2025-10-11T01:08:27.527Z"
+  },
+  {
+    "id": "karma2",
+    "balance": 222,
+    "exchangeableBalance": 222,
+    "createdAt": "2025-10-11T01:08:27.538Z"
+  },
+  {
+    "id": "karma3",
+    "balance": 222,
+    "exchangeableBalance": 222,
+    "createdAt": "2025-10-11T01:08:27.545Z"
+  },
+  {
+    "id": "figma",
+    "balance": 10000,
+    "exchangeableBalance": 10000,
+    "createdAt": "2025-10-11T01:09:46.083Z"
+  },
+  {
+    "id": "figma2",
+    "balance": 10000,
+    "exchangeableBalance": 10000,
+    "createdAt": "2025-10-11T01:09:46.094Z"
+  },
+  {
+    "id": "figma3",
+    "balance": 10000,
+    "exchangeableBalance": 10000,
+    "createdAt": "2025-10-11T01:09:46.100Z"
+  },
+  {
+    "id": "sama1",
+    "balance": 1000,
+    "exchangeableBalance": 1000,
+    "createdAt": "2025-10-11T01:10:24.287Z"
+  },
+  {
+    "id": "sama2",
+    "balance": 1000,
+    "exchangeableBalance": 1000,
+    "createdAt": "2025-10-11T01:10:24.291Z"
+  },
+  {
+    "id": "sama3",
+    "balance": 1000,
+    "exchangeableBalance": 1000,
+    "createdAt": "2025-10-11T01:10:24.294Z"
   }
 ]

@@ -6,7 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>所持金管理アプリ</title>
   <link rel="stylesheet" href="../css/import.css">
+  <link rel="manifest" href="/manifest/manifest.json">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 </head>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+        .catch(err => console.error('SW registration failed:', err));
+    });
+  }
+</script>
 
 <body>
   <div class="app-container">
@@ -108,7 +122,6 @@
           </div>
         </div>
       </div>
-
       <!-- Ranking Tab -->
       <div class="tab-content" id="ranking">
         <h3 style="margin-bottom: 20px;">ユーザー</h3>
@@ -142,18 +155,69 @@
           <div>履歴を読み込み中...</div>
         </div>
       </div>
+      
+      <div class="tab-content" id="dev">
+       <h3 style="margin-bottom: 20px;">開発者向けツール</h3>
+        <div class="input-section content-box">
+          <h3 style="margin-bottom: 16px;">ユーザー複数追加</h3>
+
+          <div class="input-group">
+            <label>ユーザーID</label>
+            <textarea type="text" style="height: 100px;" class="input-field" id="new-user-id-dev" placeholder="例: CC-2025-XXXXX（改行で複数ユーザー追加）"></textarea>
+          </div>
+
+          <div class="input-group">
+            <label>初期残高</label>
+            <input type="number" class="input-field" id="initial-balance-dev" placeholder="0">
+          </div>
+
+          <button class="btn" id="create-user-btn-dev">作成</button>
+        </div>
+        <div class="input-section content-box">
+          <h3 style="margin-bottom: 16px;">CSSテスター</h3>
+
+          <div class="input-group" style="margin-bottom: 0;">
+            <label>CSS</label>
+            <textarea type="text" style="height: 100px;" class="input-field" id="css-dev" placeholder="cssを入力"></textarea>
+          </div>
+        </div>
+      </div>
 
       <!-- Settings Tab -->
       <div class="tab-content" id="settings">
         <h3 style="margin-bottom: 20px;">設定</h3>
         <div class="settings-item content-box">
-          <div class="settings-label">ダークモード</div>
+          <div class="settings-label">テーマ</div>
+          <div class="select-wrapper">
+            <select id="theme-select" class="input-field">
+              <option value="light">ライト</option>
+              <option value="dark">ダーク</option>
+              <option value="sepia">セピア</option>
+            </select>
+          </div>
+        </div>
+        <div class="settings-item content-box">
+          <div class="settings-label">起動時のタブ</div>
+          <div class="select-wrapper">
+            <select id="default-tab-select" class="input-field">
+              <option value="dashboard">統計</option>
+              <option value="balance">残高</option>
+              <option value="ranking">ユーザー</option>
+              <option value="history">履歴</option>
+              <option value="settings">設定</option>
+            </select>
+          </div>
+        </div>
+        <!-- Settings Tab -->
+        <div class="settings-item content-box">
+          <div class="settings-label">開発タブを表示</div>
           <label class="switch">
-            <input type="checkbox" id="dark-mode-toggle">
+            <input type="checkbox" id="dev-tab-toggle">
             <span class="slider"></span>
           </label>
         </div>
       </div>
+
     </div>
 
     <!-- Bottom Navigation -->
@@ -174,6 +238,10 @@
         <i class="material-icons">history</i>
         <span>履歴</span>
       </div>
+      <div class="nav-item" id="dev-menu" onclick="switchTab('dev', this)">
+        <i class="material-icons">build</i>
+        <span>開発</span>
+      </div>
       <div class="nav-item" onclick="switchTab('settings', this)">
         <i class="material-icons">settings</i>
         <span>設定</span>
@@ -186,6 +254,8 @@
   <script src="../js/api.js"></script>
   <script src="../js/qrScanner.js"></script>
   <script src="../js/uiUpdater.js"></script>
+  <script src="../js/setting.js"></script>
+  <script src="../js/dev.js"></script>
 </body>
 
 </html>

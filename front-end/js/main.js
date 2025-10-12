@@ -7,23 +7,6 @@ let isLoading = false;
 // API Base URL (プロダクションでは実際のサーバーのURLに変更)
 const API_BASE = '/api';
 
-// Dark mode functions
-function initDarkMode() {
-  const isDarkMode = localStorage.getItem('darkMode') === 'true';
-  if (isDarkMode) {
-    document.body.classList.add('dark-mode');
-    document.getElementById('dark-mode-toggle').checked = true;
-  }
-}
-
-function toggleDarkMode() {
-  const isDarkMode = document.body.classList.toggle('dark-mode');
-  localStorage.setItem('darkMode', isDarkMode);
-
-  // 通知表示
-  showNotification(isDarkMode ? 'ダークモードをオンにしました' : 'ライトモードをオンにしました');
-}
-
 // Utility functions
 function showLoading(show) {
   isLoading = show;
@@ -193,7 +176,8 @@ function switchTab(tabName, navItem) {
     'dashboard': 'ダッシュボード',
     'ranking': 'ユーザー',
     'history': '取引履歴',
-    'settings': '設定'
+    'settings': '設定',
+    'dev': '開発'
   };
   document.getElementById('header-title').textContent = titles[tabName];
 

@@ -4,12 +4,60 @@
     "balance": 11100
   },
   {
+    "id": "figma",
+    "balance": 10000
+  },
+  {
+    "id": "figma2",
+    "balance": 10000
+  },
+  {
+    "id": "figma3",
+    "balance": 10000
+  },
+  {
     "id": "CC-2025-0NS9EN",
     "balance": 1100
   },
   {
     "id": "test2",
     "balance": 1000
+  },
+  {
+    "id": "mono",
+    "balance": 1000
+  },
+  {
+    "id": "mono2",
+    "balance": 1000
+  },
+  {
+    "id": "mono3",
+    "balance": 1000
+  },
+  {
+    "id": "sama1",
+    "balance": 1000
+  },
+  {
+    "id": "sama2",
+    "balance": 1000
+  },
+  {
+    "id": "sama3",
+    "balance": 1000
+  },
+  {
+    "id": "karma",
+    "balance": 222
+  },
+  {
+    "id": "karma2",
+    "balance": 222
+  },
+  {
+    "id": "karma3",
+    "balance": 222
   },
   {
     "id": "CC-2025-087AZR",
@@ -37,6 +85,18 @@
   },
   {
     "id": "test",
+    "balance": 100
+  },
+  {
+    "id": "lama",
+    "balance": 100
+  },
+  {
+    "id": "lama2",
+    "balance": 100
+  },
+  {
+    "id": "lama3",
     "balance": 100
   },
   {
