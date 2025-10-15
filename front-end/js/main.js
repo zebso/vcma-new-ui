@@ -19,6 +19,11 @@ function showLoading(show) {
       btn.style.opacity = '1';
     }
   });
+
+  const savedGameType = localStorage.getItem('selectedGameType');
+  if (savedGameType) {
+    updateButtonState(savedGameType);
+  }
 }
 
 function showNotification(message, type = 'info') {
@@ -117,7 +122,9 @@ function handleMoneyChange(isAdd) {
       amountInput.value = '';
       // ゲーム名はロックされていなければクリア
       const lockToggle = document.getElementById('lock-toggle');
-      if (gameInput && (!lockToggle || !lockToggle.checked)) {
+      if (lockToggle.checked) {
+        updateButtonState(gameInput.value);
+      } else {
         gameInput.value = '';
       }
       showNotification(`${isAdd ? '追加' : '減算'}が完了しました`);
@@ -212,13 +219,6 @@ function initGameTypeLock() {
       // 保存されたゲームタイプを復元
       if (savedGameType) {
         gameTypeSelect.value = savedGameType;
-
-        // ゲームタイプがexchangeのときは追加ボタンを無効化
-        if (savedGameType === 'exchange') {
-          const addBtn = document.getElementById('add-amount-btn');
-          addBtn.disabled = true;
-          addBtn.style.opacity = '0.3';
-        }
       }
 
       // ロック状態を適用
@@ -270,16 +270,20 @@ function lockSelect() {
 }
 
 // ゲームタイプがexchangeのときは追加ボタンを無効化
-function buttonStateUpdater() {
-  const select = document.getElementById('game-type');
+function updateButtonState(gameType) {
   const addBtn = document.getElementById('add-amount-btn');
-  if (select.value === 'exchange') {
+  if (gameType === 'exchange') {
     addBtn.disabled = true;
-    addBtn.style.opacity = '0.3';
+    addBtn.style.opacity = '0.6';
   } else {
     addBtn.disabled = false;
     addBtn.style.opacity = '1';
   }
+}
+
+function handleButtonState() {
+  const select = document.getElementById('game-type');
+  updateButtonState(select.value);
 }
 
 // Initialize event listeners

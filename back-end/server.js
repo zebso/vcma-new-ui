@@ -101,6 +101,11 @@ const createTransactionHandler = type => {
 
     // 減算時のゲーム別上限チェック
     if (type === 'subtract') {
+      // 残高を超える場合はエラー
+      if (num > user.balance) {
+        return res.status(400).json({ error: '残高不足です' });
+      }
+
       if (games === 'exchange') {
         if (user.exchangedAmount >= GAME_LIMITS['exchange']) {
           return res.status(400).json({

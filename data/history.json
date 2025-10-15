@@ -1,5 +1,32 @@
 [
   {
+    "timestamp": "2025-10-14T03:30:18.019Z",
+    "id": "CC-5348-5671",
+    "games": "exchange",
+    "type": "subtract",
+    "amount": 100,
+    "balance": 700,
+    "exchangedAmount": 200
+  },
+  {
+    "timestamp": "2025-10-14T03:30:09.481Z",
+    "id": "CC-5348-5671",
+    "games": "blackjack",
+    "type": "add",
+    "amount": 400,
+    "balance": 700,
+    "exchangedAmount": 100
+  },
+  {
+    "timestamp": "2025-10-14T03:29:49.979Z",
+    "id": "CC-5348-5671",
+    "games": "exchange",
+    "type": "subtract",
+    "amount": 100,
+    "balance": 300,
+    "exchangedAmount": 100
+  },
+  {
     "timestamp": "2025-10-12T11:37:40.025Z",
     "id": "CC-5348-5671",
     "games": "blackjack",
