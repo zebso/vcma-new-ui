@@ -7,7 +7,7 @@ const http = require('http');
 const app = express();
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
-// const HOST = '10.16.243.159';
+// const HOST = '10.16.246.184';
 const HOST = process.env.HOST || 'localhost';
 
 // ゲーム別の上限設定

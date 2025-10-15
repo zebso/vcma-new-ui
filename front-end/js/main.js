@@ -195,6 +195,8 @@ function switchTab(tabName, navItem) {
     loadRanking();
   } else if (tabName === 'history') {
     loadHistory();
+  } else if (tabName === 'balance') {
+    handleButtonState();
   }
 
   window.scroll({
