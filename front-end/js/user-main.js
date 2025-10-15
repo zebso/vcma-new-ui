@@ -1,95 +1,104 @@
-const API_BASE = '/api'; // APIのベースURLに変更してください
+var API_BASE = '/api'; // APIのベースURLに変更してください
 
-let video = document.getElementById('video');
-let canvas = document.getElementById('canvas');
-let ctx = canvas.getContext('2d');
-let stream = null;
-let scanInterval = null;
-let autoCloseTimer = null;
+var video = document.getElementById('video');
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var stream = null;
+var scanInterval = null;
+var autoCloseTimer = null;
 
 // カメラ管理
-let qrDeviceIds = [];
-let qrCurrentIndex = 0;
+var qrDeviceIds = [];
+var qrCurrentIndex = 0;
 
 // カメラ列挙
 function enumerateCameras() {
   return navigator.mediaDevices.enumerateDevices()
-    .then(devices => {
-      const videos = devices.filter(d => d.kind === 'videoinput');
-      qrDeviceIds = videos.map(v => v.deviceId);
+    .then(function(devices) {
+      var videos = devices.filter(function(d) { return d.kind === 'videoinput'; });
+      qrDeviceIds = videos.map(function(v) { return v.deviceId; });
       // 背面(environment/back) っぽいデバイスを優先
-      const envIdx = videos.findIndex(v => /back|environment/i.test(v.label));
+      var envIdx = videos.findIndex(function(v) { return /back|environment/i.test(v.label); });
       if (envIdx >= 0) qrCurrentIndex = envIdx;
     })
-    .catch(e => {
+    .catch(function(e) {
       // 取得できない環境(iOSの初回など)は後続の getUserMedia で権限付与後に再取得
       qrDeviceIds = [];
     });
 }
 
 // カメラ起動
-async function startCamera() {
-  try {
+function startCamera() {
+  return new Promise(function(resolve, reject) {
     // 既存のストリームを停止
     if (stream) {
-      stream.getTracks().forEach(track => track.stop());
+      stream.getTracks().forEach(function(track) { track.stop(); });
     }
 
     // カメラデバイスがない場合は列挙
-    if (qrDeviceIds.length === 0) {
-      await enumerateCameras();
-    }
-
-    let constraints;
-    if (qrDeviceIds.length > 0 && qrDeviceIds[qrCurrentIndex]) {
-      constraints = {
-        video: {
-          deviceId: {
-            exact: qrDeviceIds[qrCurrentIndex]
-          }
+    var cameraPromise = qrDeviceIds.length === 0 ? enumerateCameras() : Promise.resolve();
+    
+    cameraPromise
+      .then(function() {
+        var constraints;
+        if (qrDeviceIds.length > 0 && qrDeviceIds[qrCurrentIndex]) {
+          constraints = {
+            video: {
+              deviceId: {
+                exact: qrDeviceIds[qrCurrentIndex]
+              }
+            }
+          };
+        } else {
+          constraints = {
+            video: {
+              facingMode: 'environment'
+            }
+          };
         }
-      };
-    } else {
-      constraints = {
-        video: {
-          facingMode: 'environment'
+
+        return navigator.mediaDevices.getUserMedia(constraints);
+      })
+      .then(function(newStream) {
+        stream = newStream;
+        video.srcObject = stream;
+
+        // 初回の場合、権限取得後に再列挙
+        if (qrDeviceIds.length === 0) {
+          return enumerateCameras();
         }
-      };
-    }
-
-    stream = await navigator.mediaDevices.getUserMedia(constraints);
-    video.srcObject = stream;
-
-    // 初回の場合、権限取得後に再列挙
-    if (qrDeviceIds.length === 0) {
-      await enumerateCameras();
-    }
-
-    startScanning();
-  } catch (err) {
-    showError('カメラにアクセスできませんでした');
-    console.error(err);
-  }
+        return Promise.resolve();
+      })
+      .then(function() {
+        startScanning();
+        resolve();
+      })
+      .catch(function(err) {
+        showError('カメラにアクセスできませんでした');
+        console.error(err);
+        reject(err);
+      });
+  });
 }
 
 // カメラ切り替え
-document.getElementById('switchCameraBtn').addEventListener('click', async () => {
+document.getElementById('switchCameraBtn').addEventListener('click', function() {
   if (qrDeviceIds.length <= 1) return;
 
   qrCurrentIndex = (qrCurrentIndex + 1) % qrDeviceIds.length;
-  await startCamera();
+  startCamera();
 });
 
 // QRコードスキャン開始
 function startScanning() {
-  scanInterval = setInterval(() => {
+  scanInterval = setInterval(function() {
     if (video.readyState === video.HAVE_ENOUGH_DATA) {
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const code = jsQR(imageData.data, imageData.width, imageData.height);
+      var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      var code = jsQR(imageData.data, imageData.width, imageData.height);
 
       if (code) {
         handleQRDetected(code.data);
@@ -99,47 +108,51 @@ function startScanning() {
 }
 
 // QRコード検出処理
-async function handleQRDetected(qrData) {
+function handleQRDetected(qrData) {
   stopScanning();
 
-  try {
-    // 残高取得
-    const balanceRes = await fetch(`${API_BASE}/balance/${qrData}`);
-    if (!balanceRes.ok) {
-      throw new Error('IDが見つかりませんでした');
-    }
-    const balance = await balanceRes.json();
-
-    // ランキング取得
-    const rankingRes = await fetch(`${API_BASE}/ranking`);
-    const ranking = await rankingRes.json();
-
-    const rank = ranking.findIndex(r => r.id === qrData) + 1;
-
-    showBalance(balance.id, balance.balance, rank || '-');
-  } catch (err) {
-    showError(err.message || 'データの取得に失敗しました');
-  }
+  // 残高取得
+  fetch(API_BASE + '/balance/' + qrData)
+    .then(function(balanceRes) {
+      if (!balanceRes.ok) {
+        throw new Error('IDが見つかりませんでした');
+      }
+      return balanceRes.json();
+    })
+    .then(function(balance) {
+      // ランキング取得
+      return fetch(API_BASE + '/ranking')
+        .then(function(rankingRes) {
+          return rankingRes.json();
+        })
+        .then(function(ranking) {
+          var rank = ranking.findIndex(function(r) { return r.id === qrData; }) + 1;
+          showBalance(balance.id, balance.balance, rank || '-');
+        });
+    })
+    .catch(function(err) {
+      showError(err.message || 'データの取得に失敗しました');
+    });
 }
 
 // 残高表示
 function showBalance(id, balance, rank) {
   document.getElementById('userIdChip').textContent = id;
-  document.getElementById('balanceAmount').textContent = `¥${balance.toLocaleString()}`;
+  document.getElementById('balanceAmount').textContent = '¥' + balance.toLocaleString();
   document.getElementById('rankNumber').textContent = rank === '-' ? '-' : rank;
 
-  const card = document.getElementById('balanceCard');
+  var card = document.getElementById('balanceCard');
   card.classList.add('show');
 
   // プログレスバーリセット
-  const progressFill = document.getElementById('progressFill');
+  var progressFill = document.getElementById('progressFill');
   progressFill.style.animation = 'none';
-  setTimeout(() => {
+  setTimeout(function() {
     progressFill.style.animation = 'shrink 10s linear';
   }, 10);
 
   // 10秒後に自動クローズ
-  autoCloseTimer = setTimeout(() => {
+  autoCloseTimer = setTimeout(function() {
     closeBalance();
   }, 10000);
 }
@@ -161,7 +174,7 @@ function showError(message) {
   document.getElementById('errorMessage').textContent = message;
   document.getElementById('errorCard').classList.add('show');
 
-  setTimeout(() => {
+  setTimeout(function() {
     closeError();
   }, 3000);
 }
@@ -178,7 +191,7 @@ function stopScanning() {
     scanInterval = null;
   }
   if (stream) {
-    stream.getTracks().forEach(track => track.stop());
+    stream.getTracks().forEach(function(track) { track.stop(); });
     stream = null;
   }
 }
