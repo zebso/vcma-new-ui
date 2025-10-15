@@ -1,6 +1,6 @@
 {
-  "name": "CC Dashboard",
-  "short_name": "CC",
+  "name": "D point management",
+  "short_name": "D管理",
   "start_url": "/dealer?source=pwa",
   "scope": "/",
   "display": "standalone",

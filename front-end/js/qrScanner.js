@@ -113,23 +113,31 @@ function tickQr() {
     const vw = qrVideo.videoWidth;
     const vh = qrVideo.videoHeight;
 
-    // パフォーマンス安定のため縮小して解析（幅 640 目安）
-    const targetW = Math.min(640, vw);
-    const scale = targetW / vw;
-    const targetH = Math.round(vh * scale);
+    // 正方形にクロップするための計算
+    const squareSize = Math.min(vw, vh);
+    const cropX = (vw - squareSize) / 2;
+    const cropY = (vh - squareSize) / 2;
 
-    // Canvas を毎回作り直さず固定サイズで再利用
-    if (qrCanvas.width !== targetW || qrCanvas.height !== targetH) {
-      qrCanvas.width = targetW;
-      qrCanvas.height = targetH;
+    // パフォーマンス安定のため縮小して解析（正方形640x640目安）
+    const targetSize = Math.min(640, squareSize);
+    const scale = targetSize / squareSize;
+
+    // Canvas を正方形に設定
+    if (qrCanvas.width !== targetSize || qrCanvas.height !== targetSize) {
+      qrCanvas.width = targetSize;
+      qrCanvas.height = targetSize;
     }
 
     const ctx = qrCanvas.getContext('2d', { willReadFrequently: true });
-    // 現フレーム描画
-    ctx.drawImage(qrVideo, 0, 0, targetW, targetH);
+    // 正方形部分のみを描画
+    ctx.drawImage(
+      qrVideo,
+      cropX, cropY, squareSize, squareSize,  // ソース（クロップ範囲）
+      0, 0, targetSize, targetSize           // デスティネーション
+    );
 
     // ピクセル取得
-    const imageData = ctx.getImageData(0, 0, targetW, targetH);
+    const imageData = ctx.getImageData(0, 0, targetSize, targetSize);
 
     // デコード（まずは dontInvert、必要に応じ attemptBoth）
     const code = jsQR(imageData.data, imageData.width, imageData.height, {

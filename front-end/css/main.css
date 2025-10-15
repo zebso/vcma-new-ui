@@ -537,9 +537,7 @@ nav {
 }
 
 #qr-video {
-  width: 100%;
-  border-radius: 16px;
-  background: #000;
+  display: none;
 }
 
 .scanner-status {
@@ -560,7 +558,9 @@ nav {
 }
 
 canvas {
-  display: none;
+  width: 100%;
+  border-radius: 16px;
+  background: #000;
 }
 
 .camera-switch {
