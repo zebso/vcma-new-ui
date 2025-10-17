@@ -1,3 +1,5 @@
+//カメラ部分の動作deviceIdからfacingmode中心の処理にAIが変更
+
 var API_BASE = '/api'; // APIのベースURLに変更してください
 
 var video = document.getElementById('video');
@@ -10,6 +12,7 @@ var autoCloseTimer = null;
 // カメラ管理
 var qrDeviceIds = [];
 var qrCurrentIndex = 0;
+var qrCurrentFacingMode = 'user';
 
 // カメラ列挙
 function enumerateCameras() {
@@ -29,63 +32,77 @@ function enumerateCameras() {
 
 // カメラ起動
 function startCamera() {
-  return new Promise(function(resolve, reject) {
-    // 既存のストリームを停止
-    if (stream) {
-      stream.getTracks().forEach(function(track) { track.stop(); });
-    }
+  // 既存のストリームを停止
+  if (stream) {
+    stream.getTracks().forEach(function(track) { track.stop(); });
+    stream = null;
+    video.srcObject = null;
+  }
 
-    // カメラデバイスがない場合は列挙
-    var cameraPromise = qrDeviceIds.length === 0 ? enumerateCameras() : Promise.resolve();
+  // 端末列挙
+  return enumerateCameras().then(function() {
+    var tryOrders = [
+      // 1. qrCurrentFacingModeでの起動を最優先（切り替え時）
+      { video: { facingMode: qrCurrentFacingMode } },
+      // 2. 最後の手段：何でもいいからカメラを試す
+      { video: true } 
+    ].filter(Boolean);
+
+    var lastErr = null;
+    var i = 0;
+
+    var tryNext = function() {
+      if (i >= tryOrders.length) {
+        return Promise.reject(lastErr || new Error('カメラにアクセスできませんでした'));
+      }
+
+      var constraints = tryOrders[i++];
+      return navigator.mediaDevices.getUserMedia(constraints)
+        .then(function(newStream) {
+          stream = newStream;
+          video.srcObject = stream;
+
+          // 初回の場合、権限取得後に再列挙
+          if (qrDeviceIds.length === 0) {
+            return enumerateCameras();
+          }
+          return Promise.resolve();
+        })
+        .then(function() {
+          startScanning();
+          // 成功したらresolve
+          return Promise.resolve();
+        })
+        .catch(function(err) {
+          lastErr = err;
+          // 次の案へ
+          return tryNext();
+        });
+    };
     
-    cameraPromise
-      .then(function() {
-        var constraints;
-        if (qrDeviceIds.length > 0 && qrDeviceIds[qrCurrentIndex]) {
-          constraints = {
-            video: {
-              deviceId: {
-                exact: qrDeviceIds[qrCurrentIndex]
-              }
-            }
-          };
-        } else {
-          constraints = {
-            video: {
-              facingMode: 'environment'
-            }
-          };
-        }
+    return tryNext();
 
-        return navigator.mediaDevices.getUserMedia(constraints);
-      })
-      .then(function(newStream) {
-        stream = newStream;
-        video.srcObject = stream;
-
-        // 初回の場合、権限取得後に再列挙
-        if (qrDeviceIds.length === 0) {
-          return enumerateCameras();
-        }
-        return Promise.resolve();
-      })
-      .then(function() {
-        startScanning();
-        resolve();
-      })
-      .catch(function(err) {
-        showError('カメラにアクセスできませんでした');
-        console.error(err);
-        reject(err);
-      });
+  }).catch(function(err) {
+    showError('カメラにアクセスできませんでした');
+    console.error(err);
+    throw err; // エラーを上位へ伝播
   });
 }
 
 // カメラ切り替え
 document.getElementById('switchCameraBtn').addEventListener('click', function() {
-  if (qrDeviceIds.length <= 1) return;
 
-  qrCurrentIndex = (qrCurrentIndex + 1) % qrDeviceIds.length;
+  // facingMode を反転させる (user <-> environment)
+  qrCurrentFacingMode = (qrCurrentFacingMode === 'user') ? 'environment' : 'user';
+
+  // 1. ストリーム停止
+  if (stream) {
+    stream.getTracks().forEach(function(track) { track.stop(); });
+    stream = null;
+    video.srcObject = null;
+  }
+  
+  // 2. 新しい facingMode で再起動 (startCamera 関数が再利用できる)
   startCamera();
 });
 

@@ -29,25 +29,31 @@ function showLoading(show) {
 function showNotification(message, type = 'info') {
   // 簡単な通知表示
   const notification = document.createElement('div');
+  
+  const backgroundColor = type === 'error' ? '#f44336' : '#4caf50';
+
   notification.style.cssText = `
     position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
     word-break: keep-all;
-    background: ${type === 'error' ? '#f44336' : '#4caf50'};
+    background: ${backgroundColor}; 
     color: #fff;
     padding: 12px 24px;
     border-radius: 4px;
     z-index: 1000;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    font-size: 14px;
   `;
   notification.textContent = message;
+
   document.body.appendChild(notification);
 
+  // 4秒後に消える
   setTimeout(() => {
     notification.remove();
-  }, 3000);
+  }, 4000);
 }
 
 function formatCurrency(amount) {
@@ -318,3 +324,20 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
+
+// offlinepage制御
+function setupOnlineRecovery() {
+    window.addEventListener('online', function() {
+        if (window.location.pathname.endsWith('offline.html')) {
+            return;
+        }
+        setTimeout(function() {
+            window.location.reload(true);
+        }, 1000);
+    });
+    window.addEventListener('offline', function() {
+        console.log('ネットワークが切断されました。');
+    });
+}
+
+document.addEventListener('DOMContentLoaded', setupOnlineRecovery);

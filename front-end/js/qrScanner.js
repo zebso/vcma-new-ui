@@ -4,6 +4,8 @@ let qrVideoTrackList = [];
 let qrDeviceIds = [];
 let qrCurrentIndex = 0;
 let qrTicking = false;
+let qrFrameCounter = 0;
+const SCAN_INTERVAL = 5; // 5フレームに1回スキャン
 
 // 既存DOM: モーダル/ビデオ/キャンバス/ステータス
 const qrModal = document.getElementById('qr-scanner-modal');
@@ -108,59 +110,62 @@ function startQRScanning() {
 
 function tickQr() {
   if (!qrTicking) return;
+  qrFrameCounter++; // 毎フレーム、カウンターをインクリメント
 
-  if (qrVideo.readyState === qrVideo.HAVE_ENOUGH_DATA) {
-    const vw = qrVideo.videoWidth;
-    const vh = qrVideo.videoHeight;
+  // 5フレームに1回だけ重い処理を実行
+  if (qrFrameCounter % SCAN_INTERVAL === 0) {
+    if (qrVideo.readyState === qrVideo.HAVE_ENOUGH_DATA) {
+      const vw = qrVideo.videoWidth;
+      const vh = qrVideo.videoHeight;
 
-    // 正方形にクロップするための計算
-    const squareSize = Math.min(vw, vh);
-    const cropX = (vw - squareSize) / 2;
-    const cropY = (vh - squareSize) / 2;
+      // 正方形にクロップするための計算
+      const squareSize = Math.min(vw, vh);
+      const cropX = (vw - squareSize) / 2;
+      const cropY = (vh - squareSize) / 2;
 
-    // パフォーマンス安定のため縮小して解析（正方形640x640目安）
-    const targetSize = Math.min(640, squareSize);
-    const scale = targetSize / squareSize;
+      // パフォーマンス安定のため縮小して解析（正方形640x640目安）
+      const targetSize = Math.min(640, squareSize);
+      // const scale = targetSize / squareSize; // (未使用のため削除)
 
-    // Canvas を正方形に設定
-    if (qrCanvas.width !== targetSize || qrCanvas.height !== targetSize) {
-      qrCanvas.width = targetSize;
-      qrCanvas.height = targetSize;
-    }
+      // Canvas を正方形に設定
+      if (qrCanvas.width !== targetSize || qrCanvas.height !== targetSize) {
+        qrCanvas.width = targetSize;
+        qrCanvas.height = targetSize;
+      }
 
-    const ctx = qrCanvas.getContext('2d', { willReadFrequently: true });
-    // 正方形部分のみを描画
-    ctx.drawImage(
-      qrVideo,
-      cropX, cropY, squareSize, squareSize,  // ソース（クロップ範囲）
-      0, 0, targetSize, targetSize           // デスティネーション
-    );
+      const ctx = qrCanvas.getContext('2d', { willReadFrequently: true });
+      // 正方形部分のみを描画
+      ctx.drawImage(
+        qrVideo,
+        cropX, cropY, squareSize, squareSize,  // ソース（クロップ範囲）
+        0, 0, targetSize, targetSize           // デスティネーション
+      );
 
-    // ピクセル取得
-    const imageData = ctx.getImageData(0, 0, targetSize, targetSize);
+      // ピクセル取得 (ボトルネック1)
+      const imageData = ctx.getImageData(0, 0, targetSize, targetSize);
 
-    // デコード（まずは dontInvert、必要に応じ attemptBoth）
-    const code = jsQR(imageData.data, imageData.width, imageData.height, {
-      inversionAttempts: 'dontInvert'
-    });
+      // デコード (ボトルネック2)
+      const code = jsQR(imageData.data, imageData.width, imageData.height, {
+        inversionAttempts: 'dontInvert'
+      });
 
-    if (code && code.data) {
-      // 四隅ガイド（任意）
-      drawQrBox(ctx, code.location);
-      qrStatus.textContent = 'QRコードを検出しました！';
-      qrStatus.className = 'scanner-status success';
+      if (code && code.data) {
+        // QRコード検出時の処理
+        drawQrBox(ctx, code.location);
+        qrStatus.textContent = 'QRコードを検出しました！';
+        qrStatus.className = 'scanner-status success';
 
-      // ストップして結果処理
-      const text = code.data;
-      closeQRScanner();
-      // あなたのアプリのログイン共通関数へ
-      const userIdInput = document.querySelector('input[placeholder="ユーザーIDを入力"]');
-      userIdInput.value = text;
-      handleUserSearch();
-      return;
+        const text = code.data;
+        closeQRScanner();
+        const userIdInput = document.querySelector('input[placeholder="ユーザーIDを入力"]');
+        userIdInput.value = text;
+        handleUserSearch();
+        return; // 検出した場合はここでループを停止し終了
+      }
     }
   }
 
+  // 検出されなかった場合、またはスキャン間隔外のフレームの場合、次のフレームを要求
   requestAnimationFrame(tickQr);
 }
 
@@ -215,6 +220,12 @@ async function switchCamera() {
   qrStream = stream;
   qrVideoTrackList = qrStream.getVideoTracks();
   qrVideo.srcObject = qrStream;
+
+  try {
+    await qrVideo.play();
+  } catch (e) {
+    console.warn("Video play() failed after switch, might be blocked:", e);
+  }
 
   qrTicking = true;
   requestAnimationFrame(tickQr);

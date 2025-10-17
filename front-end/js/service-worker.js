@@ -1,4 +1,4 @@
-/* v1.0 */
+/* v2.0 */
 var CACHE_PREFIX = 'cc-pwa';
 var STATIC_CACHE = CACHE_PREFIX + '-static-v1';
 var RUNTIME_CACHE = CACHE_PREFIX + '-runtime-v1';
@@ -52,11 +52,18 @@ self.addEventListener('fetch', function(event) {
   }
 
   if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(request).catch(function() {
-        return caches.match(OFFLINE_URL);
-      })
-    );
+    var isRecoveryAttempt = url.search.includes('retry=');
+
+event.respondWith(
+    fetch(request)
+        .then(function(res) { return res; }) // 成功したらそのままレスポンスを返す
+        .catch(function(e) {
+            return caches.match(request).then(function(cached) {
+                if (cached) return cached;
+                return caches.match(OFFLINE_URL); // 最終手段として offline.html
+            });
+        })
+      );
     return;
   }
 
@@ -88,11 +95,7 @@ function networkFirst(request) {
       cache.put(request, res.clone());
       return res;
     });
-  }).catch(function(e) {
-    return caches.match(request).then(function(cached) {
-      if (cached) return cached;
-      if (request.mode === 'navigate') return caches.match(OFFLINE_URL);
-      throw e;
-    });
+  }).catch(function() {
+    return caches.match(request);
   });
 }

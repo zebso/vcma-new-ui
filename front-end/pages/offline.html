@@ -92,10 +92,52 @@
   <main class="container">
     <div class="status"></div>
     <h1>オフライン</h1>
-    <p>ネットワークにしてください</p>
+    <p>ネットワーク接続をご確認ください。接続が復帰したら、下のボタンを押してください。</p>
     <div class="link-container">
-      <a href="/dealer?source=pwa" class="link">再読み込み</a>
+      <a href="/dealer?source=pwa" class="link" id="retryLink">再読み込み</a>
     </div>
   </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const link = document.getElementById('retryLink');
+      if (!link) return;
+
+      link.href = '/dealer?retry=' + Date.now();
+      
+      link.addEventListener('click', function(event) {
+          event.preventDefault(); 
+          
+          const mainPageUrl = '/dealer'; 
+          
+          if (navigator.onLine) {
+              if ('serviceWorker' in navigator) {
+                  link.textContent = '解除中...';
+                  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                      let unregisterPromises = [];
+                      registrations.forEach(function(registration) {
+                          unregisterPromises.push(registration.unregister());
+                      });
+                      
+                      Promise.all(unregisterPromises).then(function() {
+                          console.log('Service Worker unregistered. Forcing reload...');
+                          window.location.replace(mainPageUrl + '?retry=' + Date.now());
+                      }).catch(function(error) {
+                          console.error('Service Worker unregistration failed:', error);
+                          window.location.replace(mainPageUrl + '?retry=' + Date.now());
+                      });
+                  });
+              } else {
+                  window.location.replace(mainPageUrl + '?retry=' + Date.now());
+              }
+          } else {
+              link.textContent = '接続を確認中です...';
+              setTimeout(function() {
+                  window.location.replace(mainPageUrl + '?retry=' + Date.now());
+              }, 1000);
+          }
+      });
+    });
+  </script>
 </body>
 </html>
