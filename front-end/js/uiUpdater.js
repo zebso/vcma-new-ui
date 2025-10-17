@@ -1,7 +1,9 @@
 // UI Update functions
 function updateBalanceDisplay(balance, exchangedAmount) {
   const balanceElement = document.querySelector('.balance-amount');
-  balanceElement.innerHTML = `${formatCurrency(balance)} <br><span>(商品交換可能：${formatCurrency(balance >= 1000 ? 1000 : balance - exchangedAmount)})</span>`;
+  const GAME_LIMITS = getGameLimits();
+  const exchangeLimit = GAME_LIMITS['exchange'];
+  balanceElement.innerHTML = `${formatCurrency(balance)} <br><span>(商品交換可能：${formatCurrency(balance >= exchangeLimit ? exchangeLimit : balance - exchangedAmount)})</span>`;
   currentBalance = balance;
   currentexchangedAmount = exchangedAmount;
 }

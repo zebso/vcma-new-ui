@@ -68,3 +68,7 @@ function createUser(id = null, balance = 0) {
 function getDashboardStats() {
   return apiCall('/dashboard-stats');
 }
+
+function getGameLimits() {
+  return apiCall('/game-limits');
+}

@@ -7,8 +7,8 @@ const http = require('http');
 const app = express();
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
-const HOST = '10.16.246.184';
-// const HOST = process.env.HOST || 'localhost';
+// const HOST = '10.16.246.184';
+const HOST = process.env.HOST || 'localhost';
 
 // ゲーム別の上限設定
 const GAME_LIMITS = {
@@ -242,6 +242,10 @@ app.get('/api/dashboard-stats', (req, res) => {
   } catch (e) {
     res.status(500).json({ error: 'Failed to compute stats' });
   }
+});
+
+app.get('/api/game-limits', (req, res) => {
+  res.json(GAME_LIMITS);
 });
 
 // --- Pages ---
