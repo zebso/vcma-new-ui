@@ -1,0 +1,62 @@
+/* Balance Tab */
+.balance-card {
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  border-radius: 12px;
+  padding: 24px;
+  color: #fff;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.balance-amount {
+  font-size: 32px;
+  font-weight: 300;
+  margin-bottom: 8px;
+}
+
+.balance-amount span {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+.balance-label {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.select-wrapper {
+  display: flex;
+  gap: 8px;
+}
+
+label[for="lock-toggle"] {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+  background: transparent;
+  color: #1976d2;
+  border: 2px solid #1976d2;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+#lock-toggle:checked+label[for="lock-toggle"] {
+  background: #1976d2;
+  color: #fff;
+}
+
+.lock {
+  display: none;
+}
+
+#lock-toggle:checked+label[for="lock-toggle"] .lock {
+  display: block;
+}
+
+#lock-toggle:checked+label[for="lock-toggle"] .lock-open {
+  display: none;
+}

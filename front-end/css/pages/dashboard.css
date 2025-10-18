@@ -1,0 +1,36 @@
+/* Dashboard Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  margin: 0;
+}
+
+.stat-card i {
+  font-size: 36px;
+  color: #1976d2;
+  margin-bottom: 12px;
+  transition: color 0.3s ease;
+}
+
+.stat-number {
+  font-size: 28px;
+  font-weight: 300;
+  color: #212121;
+  margin-bottom: 8px;
+  transition: color 0.3s ease;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}

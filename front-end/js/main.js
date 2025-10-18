@@ -56,6 +56,7 @@ function showNotification(message, type = 'info') {
   }, 4000);
 }
 
+// 数字のフォーマット（現在日本円になってるため後に変更する可能性あり）
 function formatCurrency(amount) {
   return new Intl.NumberFormat('ja-JP', {
     style: 'currency',
@@ -64,6 +65,7 @@ function formatCurrency(amount) {
   }).format(amount);
 }
 
+// 日付のフォーマット
 function formatDate(timestamp) {
   return new Date(timestamp).toLocaleString('ja-JP');
 }

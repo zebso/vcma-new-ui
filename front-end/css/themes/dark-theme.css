@@ -1,7 +1,6 @@
 @charset "utf-8";
 
 body.dark-mode {
-
   background-color: #121212;
   color: #fff;
 }
@@ -11,12 +10,6 @@ body.dark-mode .header {
   /* ステータスバーとヘッダーの背景をダークモードの色に設定 */
   background-color: #2d2d2d;
   /* dark-theme.css の header 背景色 */
-}
-
-body.dark-mode {
-  /* スクロール時の裏抜け対策 */
-  background-color: #121212;
-  /* dark-theme.css の body 背景色 */
 }
 
 /* その他のダークモード用スタイル */
