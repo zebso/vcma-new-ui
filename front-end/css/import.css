@@ -1,9 +1,23 @@
 @charset "utf-8";
 
 /* import.css */
-@import url('./fonts.css');
-@import url('./main.css');
-@import url('./dark-theme.css');
-@import url('./sepia-theme.css');
-@import url('./tablet.css');
-@import url('./desktop.css');
+
+/* Base Styles */
+@import url('./bases/base.css');
+@import url('./bases/fonts.css');
+
+/* Component Styles */
+@import url('./components/form.css');
+@import url('./components/nav.css');
+@import url('./components/qr-scanner.css');
+
+/* Page Styles */
+@import url('./pages/balance.css');
+@import url('./pages/dashboard.css');
+@import url('./pages/history.css');
+@import url('./pages/ranking.css');
+@import url('./pages/settings.css');
+
+/* Theme Styles */
+@import url('./themes/dark.css');
+@import url('./themes/sepia.css');
