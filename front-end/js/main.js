@@ -189,7 +189,7 @@ function switchTab(tabName, navItem) {
   const titles = {
     'balance': '所持金管理',
     'dashboard': 'ダッシュボード',
-    'ranking': 'ユーザー',
+    'ranking': 'ランキング',
     'history': '取引履歴',
     'settings': '設定',
     'dev': '開発'

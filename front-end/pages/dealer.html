@@ -106,7 +106,6 @@
 
       <!-- Dashboard Tab -->
       <div class="tab-content active" id="dashboard">
-        <h3 style="margin-bottom: 20px;">ダッシュボード</h3>
         <div class="stats-grid">
           <div class="stat-card content-box">
             <i class="material-icons">people</i>
@@ -127,23 +126,6 @@
       </div>
       <!-- Ranking Tab -->
       <div class="tab-content" id="ranking">
-        <h3 style="margin-bottom: 20px;">ユーザー</h3>
-        <div class="input-section content-box">
-          <h3 style="margin-bottom: 16px;">ユーザー追加</h3>
-
-          <div class="input-group">
-            <label>ユーザーID（任意。未入力なら自動生成）</label>
-            <input type="text" class="input-field" id="new-user-id" placeholder="例: CC-2025-XXXXX">
-          </div>
-
-          <div class="input-group">
-            <label>初期残高</label>
-            <input type="number" class="input-field" id="initial-balance" placeholder="0">
-          </div>
-
-          <button class="btn" id="create-user-btn">作成</button>
-        </div>
-        <h3 class="ranking-title" style="margin-bottom: 20px;">ランキング</h3>
         <div id="ranking-box" style="text-align: center; color: #666;">
           <i class="material-icons" style="font-size: 48px; margin-bottom: 16px;">leaderboard</i>
           <div>ランキングを読み込み中...</div>
@@ -152,7 +134,6 @@
 
       <!-- History Tab -->
       <div class="tab-content" id="history">
-        <h3 style="margin-bottom: 20px;">取引履歴</h3>
         <div style="text-align: center; padding: 40px 20px; color: #666;">
           <i class="material-icons" style="font-size: 48px; margin-bottom: 16px;">history</i>
           <div>履歴を読み込み中...</div>
@@ -190,7 +171,6 @@
 
       <!-- Settings Tab -->
       <div class="tab-content" id="settings">
-        <h3 style="margin-bottom: 20px;">設定</h3>
         <div class="settings-item content-box">
           <div class="settings-label">テーマ</div>
           <div class="select-wrapper">
@@ -234,13 +214,13 @@
         <i class="material-icons">dashboard</i>
         <span>統計</span>
       </div>
+      <div class="nav-item" onclick="switchTab('ranking', this)">
+        <i class="material-icons">people</i>
+        <span>順位</span>
+      </div>
       <div class="nav-item" onclick="switchTab('balance', this)">
         <i class="material-icons">account_balance_wallet</i>
         <span>残高</span>
-      </div>
-      <div class="nav-item" onclick="switchTab('ranking', this)">
-        <i class="material-icons">people</i>
-        <span>ユーザー</span>
       </div>
       <div class="nav-item" onclick="switchTab('history', this)">
         <i class="material-icons">history</i>

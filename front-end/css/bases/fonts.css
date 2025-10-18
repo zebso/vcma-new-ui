@@ -4,7 +4,7 @@
   font-family: 'JK Font';
   src:
     local('JK Font'),
-    url('/fonts/jk/JK-Maru-Gothic-M.otf') format('opentype');
+    url('../../fonts/jk/JK-Maru-Gothic-M.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -14,7 +14,7 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url('../fonts/icon/MaterialIcons-Regular.ttf') format('truetype');
+  src: url('../../fonts/icon/MaterialIcons-Regular.ttf') format('truetype');
   font-display: swap;
 }
 
