@@ -51,7 +51,7 @@
 
     <div class="content">
       <!-- Balance Tab -->
-      <div class="tab-content" id="balance">
+      <div class="tab-content active" id="balance">
         <div class="balance-card">
           <div class="balance-amount">¥0</div>
           <div class="balance-label">現在の所持金</div>
@@ -105,7 +105,7 @@
       </div>
 
       <!-- Dashboard Tab -->
-      <div class="tab-content active" id="dashboard">
+      <div class="tab-content" id="dashboard">
         <div class="stats-grid">
           <div class="stat-card content-box">
             <i class="material-icons">people</i>
@@ -186,8 +186,8 @@
           <div class="select-wrapper">
             <select id="default-tab-select" class="input-field">
               <option value="dashboard">統計</option>
-              <option value="balance">残高</option>
-              <option value="ranking">ユーザー</option>
+              <option value="ranking">ランキング</option>
+              <option value="balance" selected>残高</option>
               <option value="history">履歴</option>
               <option value="settings">設定</option>
             </select>
@@ -210,7 +210,7 @@
 
     <!-- Bottom Navigation -->
     <nav>
-      <div class="nav-item active" onclick="switchTab('dashboard', this)">
+      <div class="nav-item" onclick="switchTab('dashboard', this)">
         <i class="material-icons">dashboard</i>
         <span>統計</span>
       </div>
@@ -218,7 +218,7 @@
         <i class="material-icons">people</i>
         <span>順位</span>
       </div>
-      <div class="nav-item" onclick="switchTab('balance', this)">
+      <div class="nav-item active" onclick="switchTab('balance', this)">
         <i class="material-icons">account_balance_wallet</i>
         <span>残高</span>
       </div>

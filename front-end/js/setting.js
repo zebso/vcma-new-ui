@@ -135,7 +135,7 @@ function setupDefaultTabSelector() {
   const select = document.getElementById("default-tab-select");
   if (!select) return;
 
-  const saved = localStorage.getItem(DEFAULT_TAB_KEY) || "dashboard";
+  const saved = localStorage.getItem(DEFAULT_TAB_KEY) || "balance";
   if (TAB_KEYS.includes(saved)) select.value = saved;
 
   select.addEventListener("change", (e) => {
@@ -153,7 +153,7 @@ function setupDefaultTabSelector() {
 function applyDefaultTabOnLoad() {
   let saved = localStorage.getItem(DEFAULT_TAB_KEY);
   if (!TAB_KEYS.includes(saved)) {
-    saved = "dashboard";
+    saved = "balance";
     localStorage.setItem(DEFAULT_TAB_KEY, saved);
   }
   const navItem = findNavItem(saved);

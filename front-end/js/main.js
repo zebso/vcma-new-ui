@@ -29,7 +29,7 @@ function showLoading(show) {
 function showNotification(message, type = 'info') {
   // 簡単な通知表示
   const notification = document.createElement('div');
-  
+
   const backgroundColor = type === 'error' ? '#f44336' : '#4caf50';
 
   notification.style.cssText = `
@@ -296,11 +296,29 @@ function handleButtonState() {
   updateButtonState(select.value);
 }
 
+// offlinepage制御
+function setupOnlineRecovery() {
+  window.addEventListener('online', function () {
+    if (window.location.pathname.endsWith('offline.html')) {
+      return;
+    }
+    setTimeout(function () {
+      window.location.reload(true);
+    }, 1000);
+  });
+  window.addEventListener('offline', function () {
+    console.log('ネットワークが切断されました。');
+  });
+}
+
 // Initialize event listeners
 document.addEventListener('DOMContentLoaded', function () {
+  // オンライン/オフライン検出の初期化
+  setupOnlineRecovery();
 
-  // 初期表示時にダッシュボードを読み込み
-  loadDashboard().then(() => initGameTypeLock());
+  // ゲームタイプロックの初期化
+  initGameTypeLock();
+
   // Search button
   const searchBtn = document.querySelector(
     '.input-section button.btn:not(#qr-stop-btn):not(#qr-switch-btn)'
@@ -326,20 +344,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
-
-// offlinepage制御
-function setupOnlineRecovery() {
-    window.addEventListener('online', function() {
-        if (window.location.pathname.endsWith('offline.html')) {
-            return;
-        }
-        setTimeout(function() {
-            window.location.reload(true);
-        }, 1000);
-    });
-    window.addEventListener('offline', function() {
-        console.log('ネットワークが切断されました。');
-    });
-}
-
-document.addEventListener('DOMContentLoaded', setupOnlineRecovery);
