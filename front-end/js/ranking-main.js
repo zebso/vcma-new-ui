@@ -1,13 +1,8 @@
-const API_BASE = '';
 const UPDATE_INTERVAL = 3000;
-
-function formatBalance(balance) {
-  return balance.toLocaleString('ja-JP');
-}
 
 async function fetchRanking() {
   try {
-    const res = await fetch(`${API_BASE}/api/ranking`);
+    const res = await fetch(`${API_BASE}/ranking`);
     if (!res.ok) throw new Error('Failed to fetch ranking');
     const data = await res.json();
     return data.slice(0, 5);
@@ -18,7 +13,7 @@ async function fetchRanking() {
 }
 
 function renderRanking(ranking) {
-  const content = document.getElementById('content');
+  const content = document.getElementById('ranking-box');
 
   if (!ranking || ranking.length === 0) {
     content.innerHTML = '<div class="error-message">データがありません</div>';
@@ -40,7 +35,7 @@ function renderRanking(ranking) {
               <div class="podium-rank">#${rank}</div>
               <div class="podium-card">
                 <div class="podium-id">${user.id}</div>
-                <div class="podium-balance">${formatBalance(user.balance)}</div>
+                <div class="podium-balance">${formatCurrency(user.balance)}</div>
               </div>
             </div>
           `;
@@ -58,7 +53,7 @@ function renderRanking(ranking) {
               <div class="other-rank">#${rank}</div>
               <div class="other-info">
                 <div class="other-id">${user.id}</div>
-                <div class="other-balance">${formatBalance(user.balance)}</div>
+                <div class="other-balance">${formatCurrency(user.balance)}</div>
               </div>
             </div>
           `;

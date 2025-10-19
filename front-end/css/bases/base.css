@@ -22,10 +22,6 @@
   /* iOS >= 11.2 */
 }
 
-body {
-  background-color: #ffffff;
-}
-
 a {
   text-decoration: none;
   color: inherit;

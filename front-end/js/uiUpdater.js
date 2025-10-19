@@ -75,8 +75,6 @@ function updateRankingDisplay(ranking) {
       rankingBottom.appendChild(item);
     }
   });
-  // 作成ボタン
-  document.getElementById('create-user-btn').addEventListener('click', handleCreateUser);
 }
 
 // 追加: 履歴のページング/無限スクロール実装

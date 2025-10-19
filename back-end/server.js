@@ -253,6 +253,22 @@ app.get('/api/game-limits', (req, res) => {
 app.get('/', (req, res) => res.redirect('/dealer'));
 app.get('/user', (req, res) => res.sendFile(path.join(FRONT_DIR, 'pages', 'user.html')));
 app.get('/dealer', (req, res) => res.sendFile(path.join(FRONT_DIR, 'pages', 'dealer.html')));
+app.get('/ranking', (req, res) => res.sendFile(path.join(FRONT_DIR, 'pages', 'ranking.html')));
+
+// --- PWA manifest / service worker routes ---
+app.get('/manifest/manifest.json', (req, res) => {
+  res.sendFile(path.join(FRONT_DIR, 'manifest', 'manifest.json'));
+});
+
+app.get('/service-worker.js', (req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.sendFile(path.join(FRONT_DIR, 'js', 'service-worker.js'));
+});
+
+// static の後あたりに追加
+app.get('/offline.html', (req, res) => {
+  res.sendFile(path.join(FRONT_DIR, 'pages', 'offline.html'));
+});
 
 // --- Server bootstrap (HTTPS if certs exist, else HTTP) ---
 const hasSSL = fs.existsSync(KEY_PATH) && fs.existsSync(CERT_PATH);
@@ -271,18 +287,3 @@ if (hasSSL) {
     console.log(`   To enable HTTPS, place key.pem and cert.pem under: ${SSL_DIR}`);
   });
 }
-
-// --- PWA manifest / service worker routes ---
-app.get('/manifest/manifest.json', (req, res) => {
-  res.sendFile(path.join(FRONT_DIR, 'manifest', 'manifest.json'));
-});
-
-app.get('/service-worker.js', (req, res) => {
-  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.sendFile(path.join(FRONT_DIR, 'js', 'service-worker.js'));
-});
-
-// static の後あたりに追加
-app.get('/offline.html', (req, res) => {
-  res.sendFile(path.join(FRONT_DIR, 'pages', 'offline.html'));
-});
