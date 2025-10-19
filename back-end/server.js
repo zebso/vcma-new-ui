@@ -2,8 +2,8 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const https = require('https');
-const http = require('http');
+// const https = require('https');
+// const http = require('http');
 const app = express();
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
@@ -27,9 +27,9 @@ const GAME_LIMITS = {
 const ROOT = path.resolve(__dirname, '..');
 const FRONT_DIR = path.join(ROOT, 'front-end');
 const DATA_DIR = path.join(ROOT, 'data');
-const SSL_DIR = path.join(ROOT, 'ssl');
-const KEY_PATH = path.join(SSL_DIR, 'key.pem');
-const CERT_PATH = path.join(SSL_DIR, 'cert.pem');
+// const SSL_DIR = path.join(ROOT, 'ssl');
+// const KEY_PATH = path.join(SSL_DIR, 'key.pem');
+// const CERT_PATH = path.join(SSL_DIR, 'cert.pem');
 
 // Ensure data dir exists
 fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -271,19 +271,23 @@ app.get('/offline.html', (req, res) => {
 });
 
 // --- Server bootstrap (HTTPS if certs exist, else HTTP) ---
-const hasSSL = fs.existsSync(KEY_PATH) && fs.existsSync(CERT_PATH);
-if (hasSSL) {
-  const options = {
-    key: fs.readFileSync(KEY_PATH),
-    cert: fs.readFileSync(CERT_PATH),
-  };
-  https.createServer(options, app).listen(PORT, HOST, () => {
-    console.log(`✅ HTTPS server started at https://${HOST}:${PORT}`);
-  });
-} else {
-  http.createServer(app).listen(PORT, HOST, () => {
-    console.log('⚠️  SSL cert not found. Started HTTP server instead.');
-    console.log(`➡️  http://${HOST}:${PORT}/dealer`);
-    console.log(`   To enable HTTPS, place key.pem and cert.pem under: ${SSL_DIR}`);
-  });
-}
+// const hasSSL = fs.existsSync(KEY_PATH) && fs.existsSync(CERT_PATH);
+// if (hasSSL) {
+//   const options = {
+//     key: fs.readFileSync(KEY_PATH),
+//     cert: fs.readFileSync(CERT_PATH),
+//   };
+//   https.createServer(options, app).listen(PORT, HOST, () => {
+//     console.log(`✅ HTTPS server started at https://${HOST}:${PORT}`);
+//   });
+// } else {
+//   http.createServer(app).listen(PORT, HOST, () => {
+//     console.log('⚠️  SSL cert not found. Started HTTP server instead.');
+//     console.log(`➡️  http://${HOST}:${PORT}/dealer`);
+//     console.log(`   To enable HTTPS, place key.pem and cert.pem under: ${SSL_DIR}`);
+//   });
+// }
+
+app.listen(PORT, () => {
+  console.log(`PORT: ${PORT}でサーバーが起動しました`);
+});
