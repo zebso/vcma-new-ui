@@ -53,28 +53,58 @@ function generateUserId() {
 function updateRankingDisplay(ranking) {
   const container = document.getElementById('ranking-box');
 
-  container.innerHTML = '<div class="ranking-top"></div><div class="ranking-bottom"></div>';
-  const rankingTop = container.querySelector('.ranking-top');
-  const rankingBottom = container.querySelector('.ranking-bottom');
+  if (!ranking || ranking.length === 0) {
+    container.innerHTML = '<div class="error-message">データがありません</div>';
+    return;
+  }
 
-  ranking.forEach((user, index) => {
+  const top5 = ranking.slice(0, 5);
+  const others = ranking.slice(5, 16);
+
+  container.innerHTML = `
+    <div class="ranking-top">
+      <div class="podium"></div>
+      <div class="top5"></div>
+    </div>
+    <div class="ranking-bottom"></div>
+  `;
+  const podiumDiv = container.querySelector('.podium');
+  const top5Div = container.querySelector('.top5');
+  const othersDiv = container.querySelector('.ranking-bottom');
+
+  // 上位3名をポディウムに表示、4〜5位をトップ5に表示
+  top5.forEach((user, index) => {
     const item = document.createElement('div');
     item.className = `ranking-item content-box rank-${index + 1}`;
     item.innerHTML = `
-      <div class="ranking-number">${index + 1}</div>
+      <div class="ranking-number">#${index + 1}</div>
       <div class="ranking-info">
-        <div class="ranking-name">${user.id}</div>
-        <div class="ranking-amount">${formatCurrency(user.balance)}</div>
+        <p class="ranking-id">${user.id}</p>
+        <p class="ranking-amount">${formatCurrency(user.balance)}</p>
       </div>
     `;
-    
-    if (index <= 2) {
-      // 1~3位は特別デザイン
-      rankingTop.appendChild(item);
+
+    if (index < 3) {
+      podiumDiv.appendChild(item);
     } else {
-      rankingBottom.appendChild(item);
+      top5Div.appendChild(item);
     }
   });
+
+  // 6位以降をランキングボトムに表示
+  others.forEach((user, index) => {
+    const item = document.createElement('div');
+    item.className = `ranking-item content-box rank-${index + 6}`;
+    item.innerHTML = `
+      <div class="ranking-number">${index + 6}</div>
+      <div class="ranking-info">
+        <p class="ranking-id">${user.id}</p>
+        <p class="ranking-amount">${formatCurrency(user.balance)}</p>
+      </div>
+    `;
+    othersDiv.appendChild(item);
+  });
+
 }
 
 // 追加: 履歴のページング/無限スクロール実装
