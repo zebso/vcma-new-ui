@@ -11,7 +11,7 @@ const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 // const HOST = '192.168.10.106';
 const HOST = process.env.HOST || 'localhost';
 
-// ゲーム別の上限設定
+// ゲーム別の減算上限設定
 const GAME_LIMITS = {
   'poker': 500,
   'blackjack': 400,
