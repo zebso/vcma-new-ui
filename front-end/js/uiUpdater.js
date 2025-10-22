@@ -72,10 +72,13 @@ function updateRankingDisplay(ranking) {
     item.innerHTML = `
       <div class="ranking-number">${index + 1}</div>
       <div class="ranking-info">
-        <p class="ranking-id">${user.id}</p>
+        <p class="ranking-id"></p>
         <p class="ranking-amount">${formatCurrency(user.balance)}</p>
       </div>
     `;
+
+    // インジェクション対策
+    item.querySelector('.ranking-id').textContent = user.id;
 
     if (index < 3) {
       rankingTop.appendChild(item);
@@ -123,11 +126,16 @@ function createHistoryItemNode(item) {
     : `-${formatCurrency(Math.abs(item.amount))}`;
 
   historyItem.innerHTML = `
-    <div class="history-user">ユーザーID: ${item.id}</div>
+    <div class="history-user"></div>
     <div class="history-date">${formatDate(item.timestamp)}</div>
     <div class="history-description">${typeText}${item.games ? ` (${item.games})` : ''}</div>
     <div class="history-amount ${amountClass}">${amountText}</div>
   `;
+
+  // インジェクション対策
+  historyItem.querySelector('.history-user').textContent = 'ユーザーID: ' + item.id;
+
+
   return historyItem;
 }
 
