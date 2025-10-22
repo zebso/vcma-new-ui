@@ -1,6 +1,6 @@
 /* Ranking Tab */
 
-.ranking-item {
+/* .ranking-item {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -141,9 +141,9 @@
   color: #059669;
   transition: color 0.3s ease;
   font-weight: bold;
-}
+} */
 
-/* .ranking-item {
+.ranking-item {
   padding: 16px;
   margin-bottom: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -295,10 +295,10 @@
     order: 3;
     margin-top: 48px;
   }
-} */
+}
 
 @media (min-width: 1024px) {
-  #ranking-box {
+  /* #ranking-box {
     width: 90%;
     max-width: 1400px;
     text-align: center;
@@ -426,5 +426,5 @@
     font-size: 1.8rem;
     font-weight: 700;
     color: #4ecca3;
-  }
+  } */
 }
