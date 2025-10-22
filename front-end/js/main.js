@@ -197,14 +197,14 @@ function switchTab(tabName, navItem) {
   document.getElementById('header-title').textContent = titles[tabName];
 
   // Load data when switching to certain tabs
-  if (tabName === 'dashboard') {
-    loadDashboard();
-  } else if (tabName === 'ranking') {
+  if (tabName === 'ranking') {
     loadRanking();
   } else if (tabName === 'history') {
     loadHistory();
   } else if (tabName === 'balance') {
     handleButtonState();
+  } else if (tabName === 'dev') {
+    loadDashboard();
   }
 
   window.scroll({
