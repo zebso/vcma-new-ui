@@ -1,0 +1,12 @@
+
+
+.book-item h3 {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.book-item p {
+  text-align: center;
+  color: #a5a5a5;
+  font-size: 12px;
+}

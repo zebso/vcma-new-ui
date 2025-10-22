@@ -52,8 +52,21 @@
     <div class="content">
       <!-- Rule Book Tab -->
        <div class="tab-content" id="rules">
-        <div class="content-box book-item">
-
+        <div class="content-box book-item" onclick="openPDF('ブラックジャック.pdf')">
+          <h3>ブラックジャック</h3>
+          <p>タップでルールブックを表示</p>
+        </div>
+        <div class="content-box book-item" onclick="openPDF('ポーカー.pdf')">
+          <h3>ポーカー</h3>
+          <p>タップでルールブックを表示</p>
+        </div>
+        <div class="content-box book-item" onclick="openPDF('ルーレット.pdf')">
+          <h3>ルーレット</h3>
+          <p>タップでルールブックを表示</p>
+        </div>
+        <div class="content-box book-item" onclick="openPDF('輪投げ.pdf')">
+          <h3>輪投げ</h3>
+          <p>タップでルールブックを表示</p>
         </div>
        </div>
       
@@ -191,7 +204,7 @@
           <div class="settings-label">起動時のタブ</div>
           <div class="select-wrapper">
             <select id="default-tab-select" class="input-field">
-              <option value="dashboard">統計</option>
+              <option value="dashboard">ルール</option>
               <option value="ranking">ランキング</option>
               <option value="balance" selected>残高</option>
               <option value="history">履歴</option>

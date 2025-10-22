@@ -12,6 +12,7 @@
 @import url('./components/qr-scanner.css');
 
 /* Page Styles */
+@import url('./pages/rules.css');
 @import url('./pages/balance.css');
 @import url('./pages/dashboard.css');
 @import url('./pages/history.css');

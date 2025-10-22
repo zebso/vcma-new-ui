@@ -344,3 +344,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
+
+function openPDF(filename) {
+  const url = `../pdf/${filename}`;
+  window.open(url, '_blank');
+}

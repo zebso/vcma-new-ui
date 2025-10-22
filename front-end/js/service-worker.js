@@ -99,3 +99,49 @@ function networkFirst(request) {
     return caches.match(request);
   });
 }
+
+// キャッシュを利用してpdfを読み込む
+const CACHE_NAME = 'pdf-cache-v1';
+const PDF_PATH = '../pdfs/';
+const PRECACHE_PDFS = [
+  `${PDF_PATH}ブラックジャック.pdf`,
+  `${PDF_PATH}ポーカー.pdf`,
+  `${PDF_PATH}ルーレット.pdf`,
+  `${PDF_PATH}輪投げ.pdf`,
+  //`${PDF_PATH}射的.pdf`,
+];
+
+// --- インストール時：PDFを事前キャッシュ ---
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_PDFS))
+  );
+});
+
+// --- フェッチイベントでキャッシュ制御 ---
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  if (request.url.includes(PDF_PATH)) {
+    event.respondWith(
+      caches.match(request).then(cachedResponse => {
+        if (cachedResponse) {
+          // キャッシュがある → すぐ返す & バックグラウンド更新
+          fetch(request).then(response => {
+            if (response.ok) {
+              caches.open(CACHE_NAME).then(cache => cache.put(request, response.clone()));
+            }
+          });
+          return cachedResponse;
+        } else {
+          // キャッシュがない → ネットから取得して保存
+          return fetch(request).then(response => {
+            if (response.ok) {
+              caches.open(CACHE_NAME).then(cache => cache.put(request, response.clone()));
+            }
+            return response;
+          });
+        }
+      })
+    );
+  }
+});
