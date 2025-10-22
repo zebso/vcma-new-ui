@@ -50,6 +50,21 @@
     </div>
 
     <div class="content">
+      <!-- Rule Book Tab -->
+       <div class="tab-content" id="rules">
+        <div class="content-box book-item">
+
+        </div>
+       </div>
+      
+      <!-- Ranking Tab -->
+      <div class="tab-content" id="ranking">
+        <div id="ranking-box" style="text-align: center; color: #666;">
+          <i class="material-icons" style="font-size: 48px; margin-bottom: 16px;">leaderboard</i>
+          <div>ランキングを読み込み中...</div>
+        </div>
+      </div>
+
       <!-- Balance Tab -->
       <div class="tab-content active" id="balance">
         <div class="balance-card">
@@ -101,14 +116,6 @@
           </div>
           <button class="btn" id="add-amount-btn">追加</button>
           <button class="btn btn-outline" id="subtract-amount-btn">減算</button>
-        </div>
-      </div>
-
-      <!-- Ranking Tab -->
-      <div class="tab-content" id="ranking">
-        <div id="ranking-box" style="text-align: center; color: #666;">
-          <i class="material-icons" style="font-size: 48px; margin-bottom: 16px;">leaderboard</i>
-          <div>ランキングを読み込み中...</div>
         </div>
       </div>
 
@@ -209,9 +216,9 @@
 
     <!-- Bottom Navigation -->
     <nav>
-      <div class="nav-item" onclick="switchTab('dashboard', this)">
-        <i class="material-icons">dashboard</i>
-        <span>統計</span>
+      <div class="nav-item" onclick="switchTab('rules', this)">
+        <i class="material-icons">menu_book</i>
+        <span>ルール</span>
       </div>
       <div class="nav-item" onclick="switchTab('ranking', this)">
         <i class="material-icons">people</i>

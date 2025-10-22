@@ -188,7 +188,7 @@ function switchTab(tabName, navItem) {
   // Update header title
   const titles = {
     'balance': '所持金管理',
-    'dashboard': 'ダッシュボード',
+    'rules': 'ルールブック一覧',
     'ranking': 'ランキング',
     'history': '取引履歴',
     'settings': '設定',
