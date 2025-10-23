@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Default Tab Preference -----------------------------
 
-const TAB_KEYS = ["dashboard", "balance", "ranking", "history", "settings"];
+const TAB_KEYS = ["dashboard", "ranking", "balance", "history", "settings"];
 const DEFAULT_TAB_KEY = "defaultTab";
 
 /** nav の該当タブ要素を取得（onclick 引数から推定） */

@@ -50,6 +50,34 @@
     </div>
 
     <div class="content">
+      <!-- Rule Book Tab -->
+       <div class="tab-content" id="rules">
+        <div class="content-box book-item" onclick="openPDF('ブラックジャック.pdf')">
+          <h3>ブラックジャック</h3>
+          <p>タップでルールブックを表示</p>
+        </div>
+        <div class="content-box book-item" onclick="openPDF('ポーカー.pdf')">
+          <h3>ポーカー</h3>
+          <p>タップでルールブックを表示</p>
+        </div>
+        <div class="content-box book-item" onclick="openPDF('ルーレット.pdf')">
+          <h3>ルーレット</h3>
+          <p>タップでルールブックを表示</p>
+        </div>
+        <div class="content-box book-item" onclick="openPDF('輪投げ.pdf')">
+          <h3>輪投げ</h3>
+          <p>タップでルールブックを表示</p>
+        </div>
+       </div>
+      
+      <!-- Ranking Tab -->
+      <div class="tab-content" id="ranking">
+        <div id="ranking-box" style="text-align: center; color: #666;">
+          <i class="material-icons" style="font-size: 48px; margin-bottom: 16px;">leaderboard</i>
+          <div>ランキングを読み込み中...</div>
+        </div>
+      </div>
+
       <!-- Balance Tab -->
       <div class="tab-content active" id="balance">
         <div class="balance-card">
@@ -104,34 +132,6 @@
         </div>
       </div>
 
-      <!-- Dashboard Tab -->
-      <div class="tab-content" id="dashboard">
-        <div class="stats-grid">
-          <div class="stat-card content-box">
-            <i class="material-icons">people</i>
-            <div class="stat-number" id="active-ids">-</div>
-            <div class="stat-label">有効ID数</div>
-          </div>
-          <div class="stat-card content-box">
-            <i class="material-icons">account_balance</i>
-            <div class="stat-number" id="total-balance">¥-</div>
-            <div class="stat-label">合計発行通貨</div>
-          </div>
-          <div class="stat-card content-box">
-            <i class="material-icons">swap_horiz</i>
-            <div class="stat-number" id="total-transactions">-</div>
-            <div class="stat-label">合計取引数</div>
-          </div>
-        </div>
-      </div>
-      <!-- Ranking Tab -->
-      <div class="tab-content" id="ranking">
-        <div id="ranking-box" style="text-align: center; color: #666;">
-          <i class="material-icons" style="font-size: 48px; margin-bottom: 16px;">leaderboard</i>
-          <div>ランキングを読み込み中...</div>
-        </div>
-      </div>
-
       <!-- History Tab -->
       <div class="tab-content" id="history">
         <div style="text-align: center; padding: 40px 20px; color: #666;">
@@ -167,6 +167,25 @@
               placeholder="cssを入力"></textarea>
           </div>
         </div>
+        
+        <h3 style="margin-bottom: 20px;">ダッシュボード</h3>
+        <div class="stats-grid">
+          <div class="stat-card content-box">
+            <i class="material-icons">people</i>
+            <div class="stat-number" id="active-ids">-</div>
+            <div class="stat-label">有効ID数</div>
+          </div>
+          <div class="stat-card content-box">
+            <i class="material-icons">account_balance</i>
+            <div class="stat-number" id="total-balance">¥-</div>
+            <div class="stat-label">合計発行通貨</div>
+          </div>
+          <div class="stat-card content-box">
+            <i class="material-icons">swap_horiz</i>
+            <div class="stat-number" id="total-transactions">-</div>
+            <div class="stat-label">合計取引数</div>
+          </div>
+        </div>
       </div>
 
       <!-- Settings Tab -->
@@ -185,7 +204,7 @@
           <div class="settings-label">起動時のタブ</div>
           <div class="select-wrapper">
             <select id="default-tab-select" class="input-field">
-              <option value="dashboard">統計</option>
+              <option value="dashboard">ルール</option>
               <option value="ranking">ランキング</option>
               <option value="balance" selected>残高</option>
               <option value="history">履歴</option>
@@ -210,9 +229,9 @@
 
     <!-- Bottom Navigation -->
     <nav>
-      <div class="nav-item" onclick="switchTab('dashboard', this)">
-        <i class="material-icons">dashboard</i>
-        <span>統計</span>
+      <div class="nav-item" onclick="switchTab('rules', this)">
+        <i class="material-icons">menu_book</i>
+        <span>ルール</span>
       </div>
       <div class="nav-item" onclick="switchTab('ranking', this)">
         <i class="material-icons">people</i>

@@ -53,7 +53,16 @@ function generateUserId() {
 function updateRankingDisplay(ranking) {
   const container = document.getElementById('ranking-box');
 
-  container.innerHTML = '<div class="ranking-top"></div><div class="ranking-bottom"></div>';
+  if (!ranking || ranking.length === 0) {
+    container.innerHTML = '<div class="error-message">データがありません</div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="ranking-top"></div>
+    <div class="ranking-bottom"></div>
+  `;
+
   const rankingTop = container.querySelector('.ranking-top');
   const rankingBottom = container.querySelector('.ranking-bottom');
 
@@ -63,13 +72,15 @@ function updateRankingDisplay(ranking) {
     item.innerHTML = `
       <div class="ranking-number">${index + 1}</div>
       <div class="ranking-info">
-        <div class="ranking-name">${user.id}</div>
-        <div class="ranking-amount">${formatCurrency(user.balance)}</div>
+        <p class="ranking-id"></p>
+        <p class="ranking-amount">${formatCurrency(user.balance)}</p>
       </div>
     `;
-    
-    if (index <= 2) {
-      // 1~3位は特別デザイン
+
+    // インジェクション対策
+    item.querySelector('.ranking-id').textContent = user.id;
+
+    if (index < 3) {
       rankingTop.appendChild(item);
     } else {
       rankingBottom.appendChild(item);
@@ -115,11 +126,16 @@ function createHistoryItemNode(item) {
     : `-${formatCurrency(Math.abs(item.amount))}`;
 
   historyItem.innerHTML = `
-    <div class="history-user">ユーザーID: ${item.id}</div>
+    <div class="history-user"></div>
     <div class="history-date">${formatDate(item.timestamp)}</div>
     <div class="history-description">${typeText}${item.games ? ` (${item.games})` : ''}</div>
     <div class="history-amount ${amountClass}">${amountText}</div>
   `;
+
+  // インジェクション対策
+  historyItem.querySelector('.history-user').textContent = 'ユーザーID: ' + item.id;
+
+
   return historyItem;
 }
 

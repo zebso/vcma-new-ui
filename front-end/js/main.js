@@ -188,7 +188,7 @@ function switchTab(tabName, navItem) {
   // Update header title
   const titles = {
     'balance': '所持金管理',
-    'dashboard': 'ダッシュボード',
+    'rules': 'ルールブック一覧',
     'ranking': 'ランキング',
     'history': '取引履歴',
     'settings': '設定',
@@ -197,14 +197,14 @@ function switchTab(tabName, navItem) {
   document.getElementById('header-title').textContent = titles[tabName];
 
   // Load data when switching to certain tabs
-  if (tabName === 'dashboard') {
-    loadDashboard();
-  } else if (tabName === 'ranking') {
+  if (tabName === 'ranking') {
     loadRanking();
   } else if (tabName === 'history') {
     loadHistory();
   } else if (tabName === 'balance') {
     handleButtonState();
+  } else if (tabName === 'dev') {
+    loadDashboard();
   }
 
   window.scroll({
@@ -344,3 +344,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
+
+function openPDF(filename) {
+  const url = `../pdf/${filename}`;
+  window.open(url, '_blank');
+}
