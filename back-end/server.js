@@ -108,9 +108,9 @@ const createTransactionHandler = type => {
       }
 
       if (games === 'exchange') {
-        if (user.exchangedAmount >= GAME_LIMITS['exchange']) {
+        if (num > ((user.balance >= GAME_LIMITS['exchange'] ? GAME_LIMITS['exchange'] : user.balance) - user.exchangedAmount)) {
           return res.status(400).json({
-            error: `1人当たりの交換可能ポイント数${GAME_LIMITS['exchange'].toLocaleString()}を超えています`
+            error: `交換可能ポイント数を超えています`
           });
         }
       } else {
