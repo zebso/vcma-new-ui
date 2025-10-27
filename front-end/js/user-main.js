@@ -62,6 +62,13 @@ function startCamera() {
           stream = newStream;
           video.srcObject = stream;
 
+          // インカメラの場合は左右反転
+          if (qrCurrentFacingMode === 'user') {
+            video.style.transform = 'scaleX(-1)';
+          } else {
+            video.style.transform = 'scaleX(1)';
+          }
+
           // 初回の場合、権限取得後に再列挙
           if (qrDeviceIds.length === 0) {
             return enumerateCameras();
