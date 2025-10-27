@@ -95,6 +95,8 @@ const createTransactionHandler = type => {
       return res.status(400).json({ error: 'invalid request' });
     }
 
+    if (games === '') return res.status(400).json({ error: 'ゲームを選択してください' });
+
     const users = loadJSON(usersFile);
     const history = loadJSON(historyFile);
     const user = users.find(u => u.id === id);
