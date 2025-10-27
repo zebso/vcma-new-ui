@@ -1,5 +1,14 @@
 [
   {
+    "timestamp": "2025-10-27T06:22:56.221Z",
+    "id": "CC-5348-5671",
+    "games": "blackjack",
+    "type": "add",
+    "amount": 10000000,
+    "balance": 10000700,
+    "exchangedAmount": 700
+  },
+  {
     "timestamp": "2025-10-27T06:11:42.864Z",
     "id": "CC-9413-8753",
     "games": "blackjack",
