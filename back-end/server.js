@@ -13,14 +13,14 @@ const HOST = '10.16.246.184';
 
 // ゲーム別の減算上限設定
 const GAME_LIMITS = {
-  'poker': 500,
-  'blackjack': 400,
-  'roulette': 300,
-  'ring-toss': 200,
-  'shooting': 200,
-  'exchange': 1000, // 商品交換は1IDあたりの上限
+  'poker': Infinity,
+  'blackjack': Infinity,
+  'roulette': Infinity,
+  'ring-toss': Infinity,
+  'shooting': Infinity,
+  'exchange': Infinity, // 商品交換は1IDあたりの上限
   // デフォルト（ゲーム指定なし）
-  'default': 100
+  'default': Infinity
 };
 
 // --- Paths ---
