@@ -17,8 +17,8 @@ const GAME_LIMITS = {
   'blackjack': Infinity,
   'roulette': Infinity,
   'ring-toss': Infinity,
-  'shooting': Infinity,
-  'exchange': Infinity, // 商品交換は1IDあたりの上限
+  'shooting': 1000,
+  'exchange': 1000000, // 商品交換は1IDあたりの上限
   // デフォルト（ゲーム指定なし）
   'default': Infinity
 };
