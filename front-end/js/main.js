@@ -58,9 +58,9 @@ function showNotification(message, type = 'info') {
 
 // 数字のフォーマット（現在日本円になってるため後に変更する可能性あり）
 function formatCurrency(amount) {
-  return new Intl.NumberFormat('ja-JP', {
+  return 'D' + new Intl.NumberFormat('us-EN', {
     style: 'currency',
-    currency: 'JPY',
+    currency: 'USD',
     minimumFractionDigits: 0
   }).format(amount);
 }
