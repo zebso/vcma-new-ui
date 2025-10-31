@@ -109,7 +109,6 @@ const createTransactionHandler = type => {
     }
 
     if (games === '') return res.status(400).json({ error: 'ゲームを選択してください' });
-    if (exchangeType === '') return res.status(400).json({ error: '商品種類を選択してください' });
 
     const users = loadJSON(usersFile);
     const history = loadJSON(historyFile);
@@ -125,6 +124,8 @@ const createTransactionHandler = type => {
 
       if (games === 'exchange') {
         // 商品交換時の上限チェック
+        
+        if (exchangeType === '') return res.status(400).json({ error: '商品種類を選択してください' });
 
         if (user.exchangedCount.total >= GAME_LIMITS['exchangeableCount']['total']) {
           // トータルの交換回数チェック
@@ -143,7 +144,7 @@ const createTransactionHandler = type => {
           return res.status(400).json({
             error: `交換可能ポイントが足りません`
           });
-        } 
+        }
       } else {
         // ゲームの上限チェック
         const gameType = games || 'default';

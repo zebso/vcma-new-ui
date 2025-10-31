@@ -162,7 +162,11 @@ function handleQRDetected(qrData) {
 // 残高表示
 function showBalance(id, balance, rank) {
   document.getElementById('userIdChip').textContent = id;
-  document.getElementById('balanceAmount').textContent = '¥' + balance.toLocaleString();
+  document.getElementById('balanceAmount').textContent = 'D' + new Intl.NumberFormat('us-EN', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0
+  }).format(balance);
   document.getElementById('rankNumber').textContent = rank === '-' ? '-' : rank;
 
   var card = document.getElementById('balanceCard');

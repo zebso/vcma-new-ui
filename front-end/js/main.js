@@ -86,6 +86,15 @@ function handleUserSearch() {
       updateBalanceDisplay(userData.balance, userData.exchangeableBalance);
       console.log(userData);
       showNotification(`ユーザー ${userId} を読み込みました`);
+      // ゲーム名はロックされていなければクリア
+      const lockToggle = document.getElementById('lock-toggle');
+      const gameInput = document.getElementById('game-type');
+      if (lockToggle.checked) {
+        updateButtonState(gameInput.value);
+      } else {
+        gameInput.value = '';
+      }
+      handleExchangeOptions(gameInput.value);
     })
     .catch((error) => {
       if (error && error.message && error.message.includes('not found')) {
