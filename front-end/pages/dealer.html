@@ -108,10 +108,6 @@
         <div class="input-section content-box">
           <h3 style="margin-bottom: 16px;">金額変更</h3>
           <div class="input-group">
-            <label>変更金額</label>
-            <input type="number" class="input-field" placeholder="金額を入力">
-          </div>
-          <div class="input-group">
             <label>ゲーム名（オプション）</label>
             <div class="select-wrapper">
               <select id="game-type" class="input-field" onchange="handleButtonState()">
@@ -131,16 +127,20 @@
               </label>
             </div>
           </div>
+          <div class="input-group">
+            <label>変更金額</label>
+            <input type="number" class="input-field" placeholder="金額を入力">
+          </div>
           <div class="input-group" id="exchange-options">
             <label>商品種類</label>
             <div class="select-wrapper">
               <select id="exchange-type" class="input-field">
                 <option value="">選択してください</option>
-                <option value="blackjack">A 10万p</option>
-                <option value="poker">B 7万p</option>
-                <option value="roulette">C 5万p</option>
-                <option value="shooting">D 3万p</option>
-                <option value="ring-toss">E 2万p</option>
+                <option value="A">A 10万p</option>
+                <option value="B">B 7万p</option>
+                <option value="C">C 5万p</option>
+                <option value="D">D 3万p</option>
+                <option value="E">E 2万p</option>
               </select>
             </div>
           </div>

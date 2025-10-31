@@ -47,15 +47,15 @@ function handleBulkCreateUsersDev() {
       var ng = results.filter(function(r) { return !r.ok; });
 
       // 成功・失敗を個別通知（ずらして表示）
-      var delay = 3500;
+      var delay = 1000;
 
-      if (ok.length) {
-        delay += ok.length * 300 + 400;
-      }
+      // if (ok.length) {
+      //   delay += ok.length * 300 + 400;
+      // }
 
-      if (ng.length) {
-        delay += ng.length * 300 + 400;
-      }
+      // if (ng.length) {
+      //   delay += ng.length * 300 + 400;
+      // }
 
       // 最後にまとめ通知
       setTimeout(function() {
@@ -69,7 +69,7 @@ function handleBulkCreateUsersDev() {
       setTimeout(function() {
         loadRanking();
         loadDashboard();
-      }, delay + 3500);
+      }, delay + 1000);
     })
     .finally(function() {
       showLoading(false);

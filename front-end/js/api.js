@@ -32,17 +32,17 @@ function getBalance(id) {
   return apiCall(`/balance/${id}`);
 }
 
-function addMoney(id, amount, games = '') {
+function addMoney(id, amount, games = '', exchangeType = '') {
   return apiCall('/add', {
     method: 'POST',
-    body: JSON.stringify({ id, amount, games })
+    body: JSON.stringify({ id, amount, games, exchangeType })
   });
 }
 
-function subtractMoney(id, amount, games = '') {
+function subtractMoney(id, amount, games = '', exchangeType = '') {
   return apiCall('/subtract', {
     method: 'POST',
-    body: JSON.stringify({ id, amount, games })
+    body: JSON.stringify({ id, amount, games, exchangeType })
   });
 }
 

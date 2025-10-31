@@ -1,7 +1,7 @@
 // Global state
 let currentUserId = null;
 let currentBalance = 0;
-let currentExchangedAmount = 0;
+let currentexchangeableBalance = 0;
 let isLoading = false;
 
 // API Base URL (プロダクションでは実際のサーバーのURLに変更)
@@ -83,7 +83,8 @@ function handleUserSearch() {
   getBalance(userId)
     .then((userData) => {
       currentUserId = userData.id;
-      updateBalanceDisplay(userData.balance, userData.exchangedAmount);
+      updateBalanceDisplay(userData.balance, userData.exchangeableBalance);
+      console.log(userData);
       showNotification(`ユーザー ${userId} を読み込みました`);
     })
     .catch((error) => {
@@ -93,7 +94,7 @@ function handleUserSearch() {
           createUser(userId, 0)
             .then((newUser) => {
               currentUserId = newUser.user.id;
-              updateBalanceDisplay(newUser.user.balance, newUser.user.exchangedAmount);
+              updateBalanceDisplay(newUser.user.balance, newUser.user.exchangeableBalance);
               showNotification(`新規ユーザー ${userId} を作成しました`);
             })
             .catch((createError) => {
@@ -110,10 +111,20 @@ function handleMoneyChange(isAdd) {
     return;
   }
 
+  const exchangeAmount = {
+    A: 100000,
+    B: 70000,
+    C: 50000,
+    D: 30000,
+    E: 20000
+  }
+
   const amountInput = document.querySelector('input[placeholder="金額を入力"]');
   const gameInput = document.getElementById('game-type');
-  const amount = parseInt(amountInput.value);
+  const exchangeInput = document.getElementById('exchange-type');
   const games = ((gameInput && gameInput.value) || '').trim();
+  const exchangeType = ((exchangeInput && exchangeInput.value) || '').trim();
+  const amount = games === 'exchange' ? exchangeAmount[exchangeType] : parseInt(amountInput.value);
 
   if (!amount || amount <= 0) {
     showNotification('正しい金額を入力してください', 'error');
@@ -121,12 +132,12 @@ function handleMoneyChange(isAdd) {
   }
 
   const request = isAdd
-    ? addMoney(currentUserId, amount, games)
-    : subtractMoney(currentUserId, amount, games);
+    ? addMoney(currentUserId, amount, games, exchangeType)
+    : subtractMoney(currentUserId, amount, games, exchangeType);
 
   request
     .then((result) => {
-      updateBalanceDisplay(result.balance, result.exchangedAmount);
+      updateBalanceDisplay(result.balance, result.exchangeableBalance);
       amountInput.value = '';
       // ゲーム名はロックされていなければクリア
       const lockToggle = document.getElementById('lock-toggle');
@@ -135,6 +146,7 @@ function handleMoneyChange(isAdd) {
       } else {
         gameInput.value = '';
       }
+      handleExchangeOptions(gameInput.value);
       showNotification(`${isAdd ? '追加' : '減算'}が完了しました`);
     })
     .catch((error) => {
@@ -300,8 +312,10 @@ function handleButtonState() {
 function handleExchangeOptions(gameType) {
   if (gameType === 'exchange') {
     document.getElementById('exchange-options').style.display = 'block';
+    document.querySelector('.input-group:has(input[placeholder="金額を入力"])').style.display = 'none';
   } else {
     document.getElementById('exchange-options').style.display = 'none';
+    document.querySelector('.input-group:has(input[placeholder="金額を入力"])').style.display = 'block';
   }
 }
 

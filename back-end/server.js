@@ -7,9 +7,9 @@ const http = require('http');
 const app = express();
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
-const HOST = '10.16.246.184';
+// const HOST = '10.16.246.184';
 // const HOST = '192.168.10.106';
-// const HOST = process.env.HOST || 'localhost';
+const HOST = process.env.HOST || 'localhost';
 
 // ゲーム別の減算上限設定
 const GAME_LIMITS = {
@@ -18,22 +18,18 @@ const GAME_LIMITS = {
   'roulette': Infinity,
   'ring-toss': Infinity,
   'shooting': 1000,
-  'exchange': 1000000, // 商品交換は1IDあたりの上限
+  'exchangeableCount': {
+    'A': 1,
+    'B': 1,
+    'C': 2,
+    'D': 3,
+    'E': 3,
+    'total': 3
+  }, // 商品交換種類別上限
+
   // デフォルト（ゲーム指定なし）
   'default': Infinity
 };
-
-// 1IDあたりの各商品ポイント上限
-const EXCHANGE_LIMIT = {
-  'A' : 100000,
-  'B' : 70000,
-  'C' : 50000,
-  'D' : 30000,
-  'E' : 20000
-}
-
-// 1IDあたりの商品交換数上限
-const EXCHANGE_COUNT_LIMIT = 3;
 
 // --- Paths ---
 const ROOT = path.resolve(__dirname, '..');
@@ -92,22 +88,23 @@ app.get('/api/balance/:id', (req, res) => {
   const user = users.find(u => u.id === req.params.id);
   if (!user) return res.status(404).json({ error: 'ID not found' });
   // 安全な既定値
-  if (typeof user.exchangedAmount !== 'number') {
-    user.exchangedAmount = Number(user.exchangedAmount || 0);
+  if (typeof user.exchangeableBalance !== 'number') {
+    user.exchangeableBalance = Number(user.exchangeableBalance || 0);
     saveJSON(usersFile, users);
   }
-  res.json({ id: user.id, balance: user.balance, exchangedAmount: user.exchangedAmount })
+  res.json({ id: user.id, balance: user.balance, exchangeableBalance: user.exchangeableBalance })
 });
 
 const createTransactionHandler = type => {
   return (req, res) => {
-    const { id, amount, games } = req.body || {};
+    const { id, amount, games, exchangeType } = req.body || {};
     const num = Number(amount);
     if (!id || isNaN(num) || num <= 0) {
       return res.status(400).json({ error: 'invalid request' });
     }
 
     if (games === '') return res.status(400).json({ error: 'ゲームを選択してください' });
+    if (exchangeType === '') return res.status(400).json({ error: '商品種類を選択してください' });
 
     const users = loadJSON(usersFile);
     const history = loadJSON(historyFile);
@@ -122,32 +119,28 @@ const createTransactionHandler = type => {
       }
 
       if (games === 'exchange') {
-        if (num > ((user.balance >= GAME_LIMITS['exchange'] ? GAME_LIMITS['exchange'] : user.balance) - user.exchangedAmount)) {
-          return res.status(400).json({
-            error: `交換可能ポイント数を超えています`
-          });
-        }
-      } else {
-        const gameType = games || 'default';
-        const limit = GAME_LIMITS[gameType] || GAME_LIMITS['default'];
+        // 商品交換時の上限チェック
 
-        if (num > limit) {
+        if (user.exchangedCount.total >= GAME_LIMITS['exchangeableCount']['total']) {
+          // トータルの交換回数チェック
           return res.status(400).json({
-            error: `${gameType}の上限額${limit.toLocaleString()}を超えています`
+            error: `商品の交換可能回数上限${GAME_LIMITS['exchangeableCount']['total']}回を超えています`
           });
-        }
-      }
-    }
 
-    // 減算時のゲーム別上限チェック
-    if (type === 'subtract') {
-      if (games === 'exchange') {
-        if (user.exchangedAmount >= GAME_LIMITS['exchange']) {
+        } else if (user.exchangedCount[exchangeType] >= GAME_LIMITS['exchangeableCount'][exchangeType]) {
+          // 種類別交換回数チェック
           return res.status(400).json({
-            error: `1人当たりの交換可能ポイント数${GAME_LIMITS['exchange'].toLocaleString()}を超えています`
+            error: `商品${exchangeType}の交換可能回数上限${GAME_LIMITS['exchangeableCount'][exchangeType]}回を超えています`
           });
-        }
+          
+        } else if (num > user.exchangeableBalance) {
+          // 現在の残高で交換可能なポイント数チェック
+          return res.status(400).json({
+            error: `交換可能ポイント数${user.exchangeableBalance.toLocaleString()}を超えています`
+          });
+        } 
       } else {
+        // ゲームの上限チェック
         const gameType = games || 'default';
         const limit = GAME_LIMITS[gameType] || GAME_LIMITS['default'];
 
@@ -160,34 +153,39 @@ const createTransactionHandler = type => {
     }
 
     // 既定値（未定義対策）
-    if (typeof user.exchangedAmount !== 'number') {
-      user.exchangedAmount = Number(user.exchangedAmount || user.balance || 0);
-    }
-
-    // 商品交換時の出金はランキング対象 balance を変えない
-    if (!(games === 'exchange' && type === 'subtract')) {
-      user.balance += type === 'add' ? num : -num;
+    if (typeof user.exchangeableBalance !== 'number') {
+      user.exchangeableBalance = Number(user.exchangeableBalance || user.balance || 0);
     }
 
     if (games === 'exchange' && type === 'subtract') {
-      user.exchangedAmount += num; // 商品交換済みポイントを更新
+      // 商品交換時は交換可能ポイントのみ減算
+      user.exchangeableBalance -= num;
+
+      // 交換回数カウントアップ
+      user.exchangedCount[exchangeType]++;
+      user.exchangedCount.total++;
+    } else {
+      // それ以外は残高、交換可能ポイント両方を更新
+      user.balance += type === 'add' ? num : -num;
+      user.exchangeableBalance += type === 'add' ? num : -num;
     }
 
     history.unshift({
       timestamp: new Date().toISOString(),
       id,
       games,
+      exchangeType,
       type,
       amount: num,
       balance: user.balance,
-      exchangedAmount: user.exchangedAmount
+      exchangeableBalance: user.exchangeableBalance
     });
 
     saveJSON(usersFile, users);
     saveJSON(historyFile, history);
     updateRanking();
 
-    res.json({ success: true, balance: user.balance, exchangedAmount: user.exchangedAmount });
+    res.json({ success: true, balance: user.balance, exchangeableBalance: user.exchangeableBalance });
   };
 };
 
@@ -223,7 +221,20 @@ app.post('/api/users', (req, res) => {
     if (isNaN(bal) || bal < 0) bal = 0;
     bal = Math.floor(bal);
 
-    const user = { id: newId, balance: bal, exchangedAmount: 0, createdAt: new Date().toISOString() };
+    const user = {
+      id: newId,
+      balance: bal,
+      exchangeableBalance: bal,
+      exchangedCount: {
+        A: 0,
+        B: 0,
+        C: 0,
+        D: 0,
+        E: 0,
+        total: 0
+      },
+      createdAt: new Date().toISOString()
+    };
     users.push(user);
     saveJSON(usersFile, users);
 
@@ -231,10 +242,11 @@ app.post('/api/users', (req, res) => {
       timestamp: new Date().toISOString(),
       id: user.id,
       games: '',
+      exchangeType: '',
       type: 'generate',
       amount: user.balance,
       balance: user.balance,
-      exchangedAmount: 0
+      exchangeableBalance: user.balance,
     });
     saveJSON(historyFile, history);
     updateRanking();
