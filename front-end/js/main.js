@@ -294,6 +294,15 @@ function updateButtonState(gameType) {
 function handleButtonState() {
   const select = document.getElementById('game-type');
   updateButtonState(select.value);
+  handleExchangeOptions(select.value);
+}
+
+function handleExchangeOptions(gameType) {
+  if (gameType === 'exchange') {
+    document.getElementById('exchange-options').style.display = 'block';
+  } else {
+    document.getElementById('exchange-options').style.display = 'none';
+  }
 }
 
 // offlinepage制御
@@ -318,6 +327,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ゲームタイプロックの初期化
   initGameTypeLock();
+
+  const gameType = document.getElementById('game-type').value;
+  handleExchangeOptions(gameType);
 
   // Search button
   const searchBtn = document.querySelector(

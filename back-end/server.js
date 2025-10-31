@@ -23,6 +23,18 @@ const GAME_LIMITS = {
   'default': Infinity
 };
 
+// 1IDあたりの各商品ポイント上限
+const EXCHANGE_LIMIT = {
+  'A' : 100000,
+  'B' : 70000,
+  'C' : 50000,
+  'D' : 30000,
+  'E' : 20000
+}
+
+// 1IDあたりの商品交換数上限
+const EXCHANGE_COUNT_LIMIT = 3;
+
 // --- Paths ---
 const ROOT = path.resolve(__dirname, '..');
 const FRONT_DIR = path.join(ROOT, 'front-end');
