@@ -141,7 +141,7 @@ const createTransactionHandler = type => {
         } else if (num > user.exchangeableBalance) {
           // 現在の残高で交換可能なポイント数チェック
           return res.status(400).json({
-            error: `交換可能ポイント数${user.exchangeableBalance.toLocaleString()}を超えています`
+            error: `交換可能ポイントが足りません`
           });
         } 
       } else {
