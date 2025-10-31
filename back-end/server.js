@@ -95,6 +95,11 @@ app.get('/api/balance/:id', (req, res) => {
   res.json({ id: user.id, balance: user.balance, exchangeableBalance: user.exchangeableBalance })
 });
 
+app.get('/api/usersJson/', (req, res) => {
+  const users = loadJSON(usersFile);
+  res.json(users);
+});
+
 const createTransactionHandler = type => {
   return (req, res) => {
     const { id, amount, games, exchangeType } = req.body || {};
@@ -132,7 +137,7 @@ const createTransactionHandler = type => {
           return res.status(400).json({
             error: `商品${exchangeType}の交換可能回数上限${GAME_LIMITS['exchangeableCount'][exchangeType]}回を超えています`
           });
-          
+
         } else if (num > user.exchangeableBalance) {
           // 現在の残高で交換可能なポイント数チェック
           return res.status(400).json({
